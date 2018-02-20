@@ -3,7 +3,7 @@
 #include<math.h>
 #include<time.h>
 
-// DefiniÁ„o da estrutura da lista
+// Defini√ß√£o da estrutura da lista
 typedef struct{
 	int tipo;
 	double tempo;
@@ -11,7 +11,7 @@ typedef struct{
 } lista;
 
 
-// FunÁ„o que remove o primeiro elemento da lista
+// Fun√ß√£o que remove o primeiro elemento da lista
 lista * remover (lista * apontador)
 {
 	lista * lap = (lista *)apontador -> proximo;
@@ -19,7 +19,7 @@ lista * remover (lista * apontador)
 	return lap;
 }
 
-// FunÁ„o que adiciona novo elemento ‡ lista, ordenando a mesma por tempo
+// Fun√ß√£o que adiciona novo elemento √† lista, ordenando a mesma por tempo
 lista * adicionar (lista * apontador, int n_tipo, double n_tempo)
 {
 	lista * lap = apontador;
@@ -63,7 +63,7 @@ lista * adicionar (lista * apontador, int n_tipo, double n_tempo)
 	}
 }
 
-// FunÁ„o que imprime no ecra todos os elementos da lista
+// Fun√ß√£o que imprime no ecra todos os elementos da lista
 void imprimir (lista * apontador)
 {
 	if(apontador == NULL)
@@ -77,42 +77,34 @@ void imprimir (lista * apontador)
 		}
 	}
 }
-//novo cÛdigo
-double poisson(double lambda, int k)
-{
-	double fat=1, func; 
-	for(int fat=1; k>1; k--)
-			fat=fat*(double)k;
-	func=((exp(-lambda)*(pow(lambda, (double)k))))/fat;
-	return func;
-}
+//novo c√≥digo
 
 //HISTOGRAMA
-void histograma(double n[], int tamanho)
+void histograma(lista * apontador, int tamanho, float lambda)
 {
-
-//int n[tamanho] ;
-/*for(int cont=0; cont<tamanho; cont++)
-{
-	n[cont]=apontador -> tempo;
-	apontador = (lista *)apontador -> proximo;
-}*/
-
-	int i, j;
- 
-	printf("%s%13s%17s\n","Element/index", "Value", "Histogram");
-
-	for(i=0; i <= (tamanho-1); i++)
-
-	{
-
-	printf("%9d%15d ", i, n[i]);
-
-	for(j = 1; j<= n[i]; j++)
-			printf("*");
-	printf("\n");
-	}
+			int i, vect[tamanho]={0}, cont;
+			float delta;
+			delta=1/(8*lambda);
+			for(i=0;i<tamanho; i++)
+				{
+						x=apontador->tempo;
+						if(x>(delta*cont) && x<(delta*(cont+1))
+								vect[cont]++;	
+						else 
+						{
+								cont++;
+								if(x>(delta*cont) && x<(delta*(cont+1))
+									vect[cont]++;	
+		
+						}				
+					apontador = (lista *)apontador -> proximo;
+						
+				}
+//IMPRIMIR O VETOR EM HISTOGRAMA
+			
+	
 }
+
 int main(void)
 {
 	lista *lista_eventos;
@@ -121,27 +113,35 @@ int main(void)
 	int  i=0, j, tamanho, tipochamada=0;
 	double  tempochamada, u, c;
 	float lambda=1.2;
-
+	
 	srand(time(NULL));
 
 	//TAMANHO DA LISTA
 	tamanho = 1 + ( rand() % 100 );
 	
+	double vect[tamanho];
+	vect[0]=0;
 
 		lista_eventos=adicionar(lista_eventos,0,c);
 
 	//GERAR CADA ELEMENTO TIPO E TEMPO
-	for(i=0; i<tamanho; i++)
+	for(i=1; i<=tamanho; i++)
 		{
+			u=((double)rand()+1)/((double)RAND_MAX+1);
+			
 			//TIPO DA CHAMADA
 			tipochamada=rand() % 3;
-			
-			//TEMPO DA CHAMADA
-         		tempochamada=(double)rand()/RAND_MAX*(60);
-    
-			lista_eventos=adicionar(lista_eventos, tipochamada, tempochamada);
-			
+
+			//taxa de chegada	
+			c=(- (double)log(u) / lambda);
+			printf("%f\n", c);
+
+			vect[i]=c;
+			printf(" vect[%d]=%f\n", i, vect[i]);
+			lista_eventos=adicionar(lista_eventos, tipochamada, c+vect[i-1]);
+
 		}
+
 	imprimir(lista_eventos);
 	printf("--------------------------------------------------------------------------------");
 
@@ -149,20 +149,9 @@ int main(void)
 	lista_eventos = remover(lista_eventos);
 	imprimir(lista_eventos);
 	printf("--------------------------------------------------------------------------------");
-	//CALCULAR  u
-	u=((double)rand()+1)/((double)RAND_MAX+1);
-	printf("u-%f\n", u);
+	
 
-	//taxa de chegada	
-	c=(- (double)log(u) / lambda);
-	printf(" c-%f\n", c);
 	printf("tamanho-%d\n\n", tamanho);
-	double funct[tamanho];
-	for(j=0; j<tamanho; j++)
-		{
-			funct[j]=poisson(lambda, j);
-			printf(" %f\n", funct[j]);
-		}
-	histograma(funct, tamanho);
+
+	histograma(lista_eventos, tamanho, lambda);
 }
-# STEL

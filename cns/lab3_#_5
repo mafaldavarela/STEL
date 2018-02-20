@@ -1,0 +1,39 @@
+Mafalda Pereira Varela
+
+1:~$ mkdir kat1
+2:~$ cd kat1
+   ~/kat1$ mkdir -p kat2/kat3/kat4
+3:~/kat1$ cd kat2
+    ~/kat1/kat2$ rm -r kat3
+4:~/kat1/kat2$ cd
+    ~$ touch name.txt
+    ~$ touch sample.c
+5:~$ cp -v *.txt kat1
+'name.txt' -> 'kat1/name.txt'
+6:~$ cp -v *.c kat1
+'sample.c' -> 'kat1/sample.c'
+7:
+8:~$ rm -r kat1b
+9:~$ cd kat1
+~/kat1$ mv name.txt rename.txt
+10:
+11:
+12:
+13:~$ cat > file.txt
+       ~$ ls -l
+result:
+….
+-rw-rw-r-- 1 c c   15 Oct 26 15:48 file.txt
+….
+a)~$ umask
+result: 0002
+b)~$ umask 0055
+     ~$ umask
+      0055
+      ~$ cat > anotherfile.txt
+14:~$ chmod g+r file.txt
+15:~$ chmod u-r file.txt
+16:~$ chmod -R a+rwX file.txt
+17:~$ chmod 664 file.txt
+18:~$ cp file/etc/passwd  home
+19:  
