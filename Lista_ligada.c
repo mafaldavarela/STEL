@@ -80,30 +80,49 @@ void imprimir (lista * apontador)
 //novo código
 
 //HISTOGRAMA
-void histograma(lista * apontador, int tamanho, float lambda)
+/*void histograma(double vector[], int tamanho, float lambda)
 {
-			int i, vect[tamanho]={0}, cont;
+			int i, j, cont, aux;
+			double *vect;
+		
 			float delta;
 			delta=1/(8*lambda);
+			vect=malloc(tamanho*sizeof(double));
+			//vect[0]=0;  
+
 			for(i=0;i<tamanho; i++)
 				{
-						x=apontador->tempo;
-						if(x>(delta*cont) && x<(delta*(cont+1))
-								vect[cont]++;	
+			
+						if(vector[i]>(delta*cont) && vector[i]<(delta*(cont+1)))
+								{
+
+								vect[cont]=vect[cont]+1;
+
+								}
 						else 
 						{
 								cont++;
-								if(x>(delta*cont) && x<(delta*(cont+1))
-									vect[cont]++;	
-		
+								vect[cont]=0;
+								if(vector[i]>(delta*cont) && vector[i]<(delta*(cont+1)))
+									vect[cont]=vect[cont]+1;	
 						}				
-					apontador = (lista *)apontador -> proximo;
-						
+			  printf("%d%f       ", cont, vect[cont]);
 				}
-//IMPRIMIR O VETOR EM HISTOGRAMA
-			
+
+				//IMPRIMIR O VETOR EM HISTOGRAMA
+					for(aux=0; aux <= (tamanho-1); aux++)
+						       {
+						           //   printf("%9d%15d       ", i, vect[i]);
+						          
+						              for(j = 1; j<= vect[aux]; aux++)
+						          		    printf("*");
+						         
+						              printf("\n");
+						       }
 	
+				free(vect);
 }
+*/
 
 int main(void)
 {
@@ -111,13 +130,13 @@ int main(void)
 	int tipo_ev; double tempo_ev;
 	lista_eventos = NULL;
 	int  i=0, j, tamanho, tipochamada=0;
-	double  tempochamada, u, c;
+	double  tempochamada, u, c, total, average;
 	float lambda=1.2;
 	
 	srand(time(NULL));
 
 	//TAMANHO DA LISTA
-	tamanho = 1 + ( rand() % 100 );
+	tamanho = 1 + ( rand() % 100);
 	
 	double vect[tamanho];
 	vect[0]=0;
@@ -137,12 +156,13 @@ int main(void)
 			printf("%f\n", c);
 
 			vect[i]=c;
-			printf(" vect[%d]=%f\n", i, vect[i]);
+		printf(" vect[%d]=%f\n", i, vect[i]);
 			lista_eventos=adicionar(lista_eventos, tipochamada, c+vect[i-1]);
 
 		}
+	
 
-	imprimir(lista_eventos);
+	//imprimir(lista_eventos);
 	printf("--------------------------------------------------------------------------------");
 
 	//ELIMINAR O PRIMEIRO EVENTO
@@ -152,6 +172,71 @@ int main(void)
 	
 
 	printf("tamanho-%d\n\n", tamanho);
+		i=1;
+		//estimador da distancia entre consecutivas chamadas
+		for(i=1;i<(tamanho+1); i++)
+		{
+				total=total+vect[i];
 
-	histograma(lista_eventos, tamanho, lambda);
+		}
+		average=total/(double)tamanho;
+		printf("the estimator of average is: %f\n ", average);
+	//histograma(vect, tamanho, lambda);
+				
+
+			int l=0, cont, aux, k=0;
+			double a;
+			int funct[tamanho];
+			float delta;
+			delta=1/(8*lambda);
+			j=0, i=0;
+					for( j=0; j<tamanho; j++)
+					{
+					
+							for( i=0; i<tamanho-1; i++)
+							
+							{
+								if(vect[i]>vect[i+1])
+								{
+							a=vect[i];
+							vect[i]=vect[i+1];
+							vect[i+1]=a;
+								}
+							}
+					}
+		
+				funct[0]=0;
+				for(k=0;k<tamanho; k++)
+				{
+					
+				
+						if((delta*cont)<vect[i] && (delta*(cont+1))>vect[i])
+								{
+									l++;
+								}
+						else 
+						{				
+								funct[cont]=l;
+								cont=cont+1;
+								funct[cont]=0;
+								if(vect[i]>(delta*cont) && vect[i]<(delta*(cont+1)))
+									funct[cont]=funct[cont]+1;
+						}				
+			 					printf("%d                 %d       ", cont, funct[cont]);
+				}
+
+
+
+	/*		//IMPRIMIR O VETOR EM HISTOGRAMA
+					for(aux=0; aux <tamanho/100; aux++)
+						       {
+						           //   printf("%9d%15d       ", i, vect[i]);
+						          
+						              for(j = 0; j<funct[aux]; j++)
+						          		    printf("*");
+						         
+						              printf("\n");
+						       }*/
+	
+			
 }
