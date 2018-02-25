@@ -8,13 +8,13 @@ double get_poisson_value(double lambda);
 int main(void){
 
   double lambda = 8; //taxa de chegada de clientes (1/s)
-  double interval = 1 / ( 8*lambda );
+  double interval = 1 / ( 8*lambda ); //intervalo usado em histograma
   int i = 0, total_samples = 10000000, vetor[30] = {0};
   int vetor_size = sizeof(vetor)/sizeof(vetor[0]);
   double total=0;
 
   srand( time(NULL) );
-
+  printf("Storing values...\n");
   FILE *fptr;
   fptr = fopen("values.txt", "wb");
 
@@ -36,7 +36,13 @@ int main(void){
 
   fclose(fptr);
   printf("All values stored!\n");
-  printf("Avg. of interval between calls: %f\n", total/total_samples);
+  printf("Storing settings...\n");
+  FILE *f;
+  f = fopen("settings.txt", "wb");
+  //passar para o Matlab info sobre valores usados em simulação
+  fprintf(f, "%f %f %d %d %f\n", lambda, interval, vetor_size ,total_samples, total/total_samples);
+  fclose(f);
+  printf("Settings stored!\n");
   return 0;
 }
 
