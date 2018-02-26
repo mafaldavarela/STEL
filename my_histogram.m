@@ -17,9 +17,9 @@ xlabel('Intervals'); % x-axis label
 ylabel('Quantity'); % y-axis label
 dim = [.725 .68 .2 .2];
 str = {'Lambda = '+string(lambda)
-    'Interval used = '+ string(interval) 
-    'Nr. of intervals = '+ string(intervals_nr) 
-    'Samples used = '+ string(samples_nr) 
+    'Interval used = '+ string(interval)
+    'Nr. of intervals = '+ string(intervals_nr)
+    'Samples used = '+ string(samples_nr)
     'Samples avg. = '+ string(samples_avg)
     'Expected avg. = '+ string(1/lambda)};
 annotation('textbox',dim,'String',str,'FitBoxToText','on');
