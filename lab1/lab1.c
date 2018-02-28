@@ -5,18 +5,21 @@
 #include <string.h>
 
 double get_poisson_proccess(double lambda);
+
 int get_interval_value(double prob, int pos);
 
 int main(void){
 
   double lambda = 8; //taxa de chegada de clientes (1/s)
-  double interval = 1 / ( 8*lambda ); //intervalo usado em histograma
-  int i = 0, total_samples = 1000000, vetor[30] = {0};
+  int i = 0, vetor[50] = {0};
+  double total_samples = 1000000;
   int vetor_size = sizeof(vetor)/sizeof(vetor[0]);
-  double total=0;
+  double total=0, interval=0;
 
   char line;
+
   line = getchar();
+
   printf("Computing line %c)\n", line);
 
   srand( time(NULL) );
@@ -27,6 +30,7 @@ int main(void){
   fptr = fopen("values.txt", "wb");
 
   if(line == 'a'){
+    interval = 1 / ( 8*lambda ); //intervalo usado em histograma
     for(i=0; i < total_samples ; i++){
       double value = get_poisson_proccess(lambda);
 
@@ -39,7 +43,9 @@ int main(void){
     }
   }
   else if( line == 'b' ){
+    interval = 1 / ( 8*lambda ); //intervalo usado em histograma
     double prob = lambda*interval;
+
     for(i = 0 ; i < total_samples ; i++){
 
       int value = get_interval_value( prob , 0 );
@@ -60,7 +66,7 @@ int main(void){
   FILE *f;
   f = fopen("settings.txt", "wb");
   //passar para o Matlab info sobre valores usados em simulação
-  fprintf(f, "%f %f %d %d %f\n", lambda, interval, vetor_size ,total_samples, total/total_samples);
+  fprintf(f, "%f %f %d %f %f\n", lambda, interval, vetor_size ,total_samples, total/total_samples);
   fclose(f);
   printf("Settings stored!\n");
   return 0;
