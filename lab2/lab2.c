@@ -6,33 +6,117 @@
 
 #define OCUPADO 1
 #define LIVRE 0
-
 typedef struct{
-  int canais_ocupados;
-  int* canais;
-}servidor;
+	int tipo;
+	double tempo;
+	struct lista * proximo;
+} lista;
 
+
+// Função que remove o primeiro elemento da lista
+lista * remover (lista * apontador)
+{
+	lista * lap = (lista *)apontador -> proximo;
+	free(apontador);
+	return lap;
+}
+
+// Função que adiciona novo elemento à lista, ordenando a mesma por tempo
+lista * adicionar (lista * apontador, int n_tipo, double n_tempo)
+{
+	lista * lap = apontador;
+	lista * ap_aux, * ap_next;
+	if(apontador == NULL)
+	{
+		apontador = (lista *) malloc(sizeof (lista));
+		apontador -> proximo = NULL;
+		apontador -> tipo = n_tipo;
+		apontador -> tempo = n_tempo;
+		return apontador;
+	}
+	else
+	{
+		if (apontador->tempo > n_tempo) {
+	        ap_aux = (lista *) malloc(sizeof (lista));
+	        ap_aux -> tipo = n_tipo;
+            ap_aux -> tempo = n_tempo;
+            ap_aux -> proximo = (struct lista *) apontador;
+            return ap_aux;
+	    }
+
+		ap_next = (lista *)apontador -> proximo;
+		while(apontador != NULL)
+		{
+			if((ap_next == NULL) || ((ap_next -> tempo) > n_tempo))
+				break;
+			apontador = (lista *)apontador -> proximo;
+			ap_next = (lista *)apontador -> proximo;
+		}
+		ap_aux = (lista *)apontador -> proximo;
+		apontador -> proximo = (struct lista *) malloc(sizeof (lista));
+		apontador = (lista *)apontador -> proximo;
+		if(ap_aux != NULL)
+			apontador -> proximo = (struct lista *)ap_aux;
+		else
+			apontador -> proximo = NULL;
+		apontador -> tipo = n_tipo;
+		apontador -> tempo = n_tempo;
+		return lap;
+	}
+}
+
+// Função que imprime no ecra todos os elementos da lista
+void imprimir (lista * apontador)
+{
+	if(apontador == NULL)
+		printf("Lista vazia!\n");
+	else
+	{
+		while(apontador != NULL)
+		{
+			printf("Tipo=%d\tTempo=%lf\n", apontador -> tipo, apontador -> tempo);
+			apontador = (lista *)apontador -> proximo;
+		}
+	}
+}
 double exponential(double l);
 double duration_of_call(double dm);
 
 int main(void){
-  servidor* server;
-  server = malloc(sizeof(server));
+
+  lista  * lista_eventos;
+	lista_eventos = NULL;
+
   double l=0.009*60*60; //taxa de chegada de clientes (1/hora)
   double dm=2*60; //media do tempo de serviço
   int m=8; //numero de canais
   int k=20000; //potenciais clientes
-  server->canais = malloc(sizeof(int)*m);
+  double ltime=0, time_atual, c;
+  int ltipo;
   srand( time(NULL) );
-  for(int i=0;i<m;i++){
-     server->canais[i]=LIVRE;
+	lista_eventos = adicionar(lista_eventos, LIVRE, exponential(l));
+  int m_ocupados=1; //canais ocupados
+  int clientes=1;//numero de clientes
+  while(m_ocupados<m){ // inicialização
+      m_ocupados ++;
+      clientes++;
+      lista_eventos = adicionar(lista_eventos, m_ocupados, duration_of_call(dm));
   }
-   for(int i=0;i<10;i++){
-     printf("time to arrive- %f\n", exponential(l));
-     printf("time of call- %f\n", duration_of_call(dm));
+  while(clientes <k){
 
-  }
-  free(server); 	
+            ltime = lista_eventos -> tempo;
+            ltipo = lista_eventos -> tipo;
+            time_atual = ltime;
+            lista_eventos = remover(lista_eventos);
+
+            if(ltipo == LIVRE){ //Se a chamada é do tipo LIVRE
+                lista_eventos = adicionar(lista_eventos, LIVRE, time_atual+exponential(l));
+                clientes++;
+
+		 }
+
+
+        }
 }
 double exponential(double l){
   double u, c;
