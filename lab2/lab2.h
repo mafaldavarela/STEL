@@ -22,7 +22,7 @@ typedef struct{
 
 lista* initialize(double dm, double l, int m);
 
-void proccess(char* arg,double dm, double l, double t, int m, int total_samples, lista * event_list);
+void proccess(char* arg,double dm, double l, double t, int m, int total_samples,int max_buffer, lista * event_list);
 
 double exponential(double l);
 

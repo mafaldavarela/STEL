@@ -10,18 +10,38 @@
 
 int main(int argc, char* argv[]){
 
-  double dm=2*60; //media do tempo de serviço (segundos)
-  int m; //numero de canais
-  if(strcmp(argv[1],"a")==0)
-    m=8;
-  else if(strcmp(argv[1],"b")==0)
-    m=10;
-  else if(strcmp(argv[1],"c")==0)
-    m=8;
-  int k=20000; //potenciais clientes
-  double l=0.009/(60*60)*k; //taxa de chegada de clientes (1/segundo)
+  double dm=0; //media do tempo de serviço (segundos)
+  int k=0; //potenciais clientes
+  double l=0; //taxa de chegada de clientes (1/segundo)
   int total_samples = 1000000;
   double t=10; //delay
+  int m=0; //numero de canais
+  int max_buffer=0;
+
+  if(strcmp(argv[1],"a")==0){
+    printf("Computing a)...\n");
+    dm=2*60;
+    m=8;
+    k=20000;
+    l=0.009*k/(double)(60*60);
+  }
+  else if(strcmp(argv[1],"b")==0){
+    printf("Computing b)...\n");
+    max_buffer=1000;
+    dm=2*60;
+    m=10;
+    k=20000;
+    l=0.009*k/(double)(60*60);
+  }
+  else if(strcmp(argv[1],"c")==0){
+    printf("Computing c)...\n");
+    max_buffer=4;
+    dm=2*60;
+    m=8;
+    k=20; //potenciais clientes
+    l=(double)(12*k)/(double)(60*60); //taxa de chegada de clientes (1/segundo)
+  }
+
   if(argc!=2){
     printf("Number of arguments invalid!\n");
     return 0;
@@ -34,7 +54,7 @@ int main(int argc, char* argv[]){
 
 	lista  * event_list = NULL;
 	event_list = initialize(dm, l , m); //ocupação de recursos
-	proccess(argv[1], dm, l, t, m, total_samples, event_list);
+	proccess(argv[1], dm, l, t, m, total_samples, max_buffer ,event_list);
 	return 0;
 }
 
@@ -50,7 +70,7 @@ lista* initialize(double dm, double l, int m){
 	return init_list;
 }
 
-void proccess(char* arg ,double dm, double l, double t, int m, int total_samples, lista * event_list){
+void proccess(char* arg ,double dm, double l, double t, int m, int total_samples, int max_buffer, lista * event_list){
 
 	servidor *server;
 	server = (servidor *)malloc(sizeof (servidor));
@@ -74,6 +94,9 @@ void proccess(char* arg ,double dm, double l, double t, int m, int total_samples
   server->waiting = 0;
   struct StackNode* time_stack = NULL;
 
+  int histograma[30] = {0};
+  int interval_nr = sizeof(histograma)/sizeof(histograma[0]);;
+  double interval = 1 / ( 8*l);
 
 	while(server->clients_handled <= total_samples || event_list!=NULL || (server->waiting) > 0){
 
@@ -84,9 +107,9 @@ void proccess(char* arg ,double dm, double l, double t, int m, int total_samples
 
 		server -> clock = event_list -> tempo;
 
-		if(event_list->tipo == FIM){
+		if(event_list->tipo == FIM || (event_list==NULL && (server->waiting)>0)){
 			(server->occupied_channels)--;
-      if(strcmp(arg,"b")==0 && (server->waiting)>0){
+      if(((strcmp(arg,"b")==0 || strcmp(arg,"c")==0)) && (server->waiting)>0){
         (server->waiting)--;
         double aux = pop(&time_stack);
         double wait_time = server->clock - aux;
@@ -94,6 +117,9 @@ void proccess(char* arg ,double dm, double l, double t, int m, int total_samples
         if(wait_time < t){
           (less_than_t->samples)++;
         }
+        int pos = (int)(wait_time/interval);
+        if(pos < interval_nr)
+          histograma[pos]++;
         (server->occupied_channels)++;
 				event_list = adicionar(event_list, FIM, server -> clock + duration_of_call(dm));
       }
@@ -109,7 +135,7 @@ void proccess(char* arg ,double dm, double l, double t, int m, int total_samples
           blocked->samples++;
           }
 
-        else if(strcmp(arg,"b")==0 && server->waiting < 1000){
+        else if((strcmp(arg,"b")==0 || strcmp(arg,"c")==0) && server->waiting < max_buffer){
           (server->waiting)++;
           push(&time_stack, server->clock);
           (client_delayed->samples)++;
@@ -131,10 +157,21 @@ void proccess(char* arg ,double dm, double l, double t, int m, int total_samples
 	imprimir(event_list);
   if(strcmp(arg,"a")==0)
 	 printf("Blocked user probability: %f\n", (double)(blocked->samples)/(double)total_samples);
-  if(strcmp(arg,"b")==0){
+  if(strcmp(arg,"b")==0 || strcmp(arg,"c")==0){
+    //variáveis para histograma
+    FILE *fptr;
+    fptr = fopen("values.txt", "wb");
+    for(int i=0; i< interval_nr; i++)
+      fprintf(fptr, "%d\n", histograma[i]);
+    FILE *f;
+    f = fopen("settings.txt", "wb");
+    //passar para o Matlab info sobre valores usados em simulação
+    fprintf(f, " %f %d %f %f\n", interval, interval_nr ,client_delayed->samples, (double)(client_delayed->ammount)/(client_delayed->samples));
+    fclose(f);
+
     printf("Probability of delayed client: %f\n", (double)(client_delayed->samples)/(double)total_samples);
     printf("Average time of delayed service: %f\n", (double)(client_delayed->ammount)/(client_delayed->samples));
-    printf("Probability of delay being less than %f: %f\n",t ,(double)(less_than_t->samples)/(client_delayed->samples));
+    printf("Probability of delay being less than %f: %f\n\n\n",t ,(double)(less_than_t->samples)/(client_delayed->samples));
   }
 	free(client_delayed);
 	free(blocked);
