@@ -5,16 +5,23 @@
 #include <string.h>
 #include "lista.h"
 #include "lab2.h"
+#include "stack.h"
 
 
 int main(int argc, char* argv[]){
 
   double dm=2*60; //media do tempo de serviço (segundos)
-  int m=8; //numero de canais
+  int m; //numero de canais
+  if(strcmp(argv[1],"a")==0)
+    m=8;
+  else if(strcmp(argv[1],"b")==0)
+    m=10;
+  else if(strcmp(argv[1],"c")==0)
+    m=8;
   int k=20000; //potenciais clientes
   double l=0.009/(60*60)*k; //taxa de chegada de clientes (1/segundo)
   int total_samples = 1000000;
-  double t=120; //delay
+  double t=10; //delay
   if(argc!=2){
     printf("Number of arguments invalid!\n");
     return 0;
@@ -38,7 +45,6 @@ lista* initialize(double dm, double l, int m){
 	for(int i=0; i<m; i++){
 		//começam todos ao mesmo tempo
 		init_list = adicionar(init_list, FIM, duration_of_call(dm));
-    //init_list = adicionar(init_list, INICIO, exponential(l));
 	}
 	init_list = adicionar(init_list, INICIO, exponential(l));
 	return init_list;
@@ -52,45 +58,44 @@ void proccess(char* arg ,double dm, double l, double t, int m, int total_samples
 	blocked = (probabilidade *)malloc(sizeof (probabilidade));
   blocked->samples=0;
 
-	probabilidade *client_delayed;
-	client_delayed = (probabilidade *)malloc(sizeof (probabilidade));
-  client_delayed->samples=0;
 
-  calc_average *service_delayed;
-	service_delayed = (calc_average *)malloc(sizeof (calc_average));
-  service_delayed->ammount=0;
-  service_delayed->samples=0;
+  calc_average *client_delayed;
+	client_delayed = (calc_average *)malloc(sizeof (calc_average));
+  client_delayed->ammount=0;
+  client_delayed->samples=0;
 
   probabilidade *less_than_t;
   less_than_t = (probabilidade *)malloc(sizeof (probabilidade));
   less_than_t->samples=0;
 
-  int total_waited;
 	server->clients_handled = m+1; //já lidamos com m+1 clientes no processo de inicialização
 	server->occupied_channels = m; //canais ocupados após inicialização
 	server->clock = 0; //manter controlo da clock do sistema
   server->waiting = 0;
-	while(server->clients_handled <= total_samples || event_list!=NULL){
+  struct StackNode* time_stack = NULL;
+
+
+	while(server->clients_handled <= total_samples || event_list!=NULL || (server->waiting) > 0){
 
     /*
     imprimir(event_list);
     getchar();
     */
+
 		server -> clock = event_list -> tempo;
 
 		if(event_list->tipo == FIM){
 			(server->occupied_channels)--;
       if(strcmp(arg,"b")==0 && (server->waiting)>0){
         (server->waiting)--;
-        (server->occupied_channels)++;
-        double aux = duration_of_call(dm);
-        if( aux > dm){
-          if((aux-dm) < t)
-            less_than_t->samples++;
-          (service_delayed -> ammount)+= aux - dm;
-          (service_delayed -> samples)++;
+        double aux = pop(&time_stack);
+        double wait_time = server->clock - aux;
+        (client_delayed->ammount) += wait_time;
+        if(wait_time < t){
+          (less_than_t->samples)++;
         }
-				event_list = adicionar(event_list, FIM, server -> clock + aux);
+        (server->occupied_channels)++;
+				event_list = adicionar(event_list, FIM, server -> clock + duration_of_call(dm));
       }
 		}
 
@@ -99,46 +104,39 @@ void proccess(char* arg ,double dm, double l, double t, int m, int total_samples
 
 			//não há recursos livres
 			if((server->occupied_channels) == m){
-        if(strcmp(arg,"a")==0)
-				    blocked->samples++;
-				//buffer=0; descartamos o cliente
-        else if(strcmp(arg,"b")==0)
+        //buffer=0; descartamos o cliente
+        if(strcmp(arg,"a")==0){
+          blocked->samples++;
+          }
+
+        else if(strcmp(arg,"b")==0 && server->waiting < 1000){
           (server->waiting)++;
-          total_waited++;
+          push(&time_stack, server->clock);
+          (client_delayed->samples)++;
+        }
 			}
 			//há recursos livres
 			else if((server->occupied_channels) < m){
 				(server->occupied_channels)++;
-        double aux = duration_of_call(dm);
-        if( aux > dm){
-          if((aux-dm) < t)
-            less_than_t->samples++;
-          (service_delayed -> ammount)+= aux - dm;
-          (service_delayed -> samples)++;
-        }
-				event_list = adicionar(event_list, FIM, server -> clock + aux);
+				event_list = adicionar(event_list, FIM, server -> clock + duration_of_call(dm));
 			}
       if(server->clients_handled <= total_samples){
         server->clients_handled++;
-        double aux = exponential(l);
-        if( aux > 1/l)
-          (client_delayed -> samples)++;
-        event_list = adicionar(event_list, INICIO, server -> clock + aux);
+        event_list = adicionar(event_list, INICIO, server -> clock + exponential(l));
       }
 		}
 		event_list = remover( event_list );
 	}
 	printf("FINISHED LOGGING\n");
 	imprimir(event_list);
-	printf("Blocked user probability: %f\n", (double)(blocked->samples)/(double)total_samples);
+  if(strcmp(arg,"a")==0)
+	 printf("Blocked user probability: %f\n", (double)(blocked->samples)/(double)total_samples);
   if(strcmp(arg,"b")==0){
     printf("Probability of delayed client: %f\n", (double)(client_delayed->samples)/(double)total_samples);
-    printf("Average of delayed service: %f\n", (double)(service_delayed->ammount)/(service_delayed->samples));
-    printf("Probability of delayed client time less than %f: %f\n", t,(double)(less_than_t->samples)/(double)total_samples);
-    printf("Total waited: %d\n", total_waited);
+    printf("Average time of delayed service: %f\n", (double)(client_delayed->ammount)/(client_delayed->samples));
+    printf("Probability of delay being less than %f: %f\n",t ,(double)(less_than_t->samples)/(client_delayed->samples));
   }
 	free(client_delayed);
-  free(service_delayed);
 	free(blocked);
   free(less_than_t);
 	free(server);
