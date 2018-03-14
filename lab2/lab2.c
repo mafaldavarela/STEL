@@ -17,6 +17,7 @@ int main(int argc, char* argv[]){
   double t=10; //delay
   int m=0; //numero de canais
   int max_buffer=0;
+  	
 
   if(strcmp(argv[1],"a")==0){
     printf("Computing a)...\n");
@@ -29,7 +30,7 @@ int main(int argc, char* argv[]){
     printf("Computing b)...\n");
     max_buffer=1000;
     dm=2*60;
-    m=10;
+    m=8;
     k=20000;
     l=0.009*k/(double)(60*60);
   }
@@ -53,12 +54,12 @@ int main(int argc, char* argv[]){
   srand( time(NULL) );
 
 	lista  * event_list = NULL;
-	event_list = initialize(dm, l , m); //ocupação de recursos
-	proccess(argv[1], dm, l, t, m, total_samples, max_buffer ,event_list);
+	event_list = initialize(dm, l , m, k , argv[1]); //ocupação de recursos
+	proccess(argv[1], dm, l, t, m, total_samples, max_buffer, k ,event_list);
 	return 0;
 }
 
-lista* initialize(double dm, double l, int m){
+lista* initialize(double dm, double l, int m, int k, char* arg){
 
 	lista *init_list;
 	init_list = NULL;
@@ -66,11 +67,14 @@ lista* initialize(double dm, double l, int m){
 		//começam todos ao mesmo tempo
 		init_list = adicionar(init_list, FIM, duration_of_call(dm));
 	}
-	init_list = adicionar(init_list, INICIO, exponential(l));
+	if(strcmp("c",arg)==0)
+		init_list = adicionar(init_list, INICIO, exponential((double)l*(k-m)));
+	else 
+		init_list = adicionar(init_list, INICIO, exponential(l));
 	return init_list;
 }
 
-void proccess(char* arg ,double dm, double l, double t, int m, int total_samples, int max_buffer, lista * event_list){
+void proccess(char* arg ,double dm, double l, double t, int m, int total_samples, int max_buffer, int k ,lista * event_list){
 
 	servidor *server;
 	server = (servidor *)malloc(sizeof (servidor));
@@ -134,7 +138,8 @@ void proccess(char* arg ,double dm, double l, double t, int m, int total_samples
         if(strcmp(arg,"a")==0){
           blocked->samples++;
           }
-
+	else if((strcmp(arg,"b")==0 || strcmp(arg,"c")==0) && server->waiting >= max_buffer)
+	  blocked->samples++;	
         else if((strcmp(arg,"b")==0 || strcmp(arg,"c")==0) && server->waiting < max_buffer){
           (server->waiting)++;
           push(&time_stack, server->clock);
@@ -148,7 +153,10 @@ void proccess(char* arg ,double dm, double l, double t, int m, int total_samples
 			}
       if(server->clients_handled <= total_samples){
         server->clients_handled++;
-        event_list = adicionar(event_list, INICIO, server -> clock + exponential(l));
+	if(strcmp("c",arg)==0)
+		event_list = adicionar(event_list, INICIO, server -> clock + exponential((double)l*(k-m-server->waiting)));
+	else 
+		event_list = adicionar(event_list, INICIO, server -> clock + exponential((double)l));
       }
 		}
 		event_list = remover( event_list );
@@ -168,9 +176,11 @@ void proccess(char* arg ,double dm, double l, double t, int m, int total_samples
     //passar para o Matlab info sobre valores usados em simulação
     fprintf(f, " %f %d %f %f\n", interval, interval_nr ,client_delayed->samples, (double)(client_delayed->ammount)/(client_delayed->samples));
     fclose(f);
-
-    printf("Probability of delayed client: %f\n", (double)(client_delayed->samples)/(double)total_samples);
-    printf("Average time of delayed service: %f\n", (double)(client_delayed->ammount)/(client_delayed->samples));
+    printf("Blocked user probability: %f\n", (double)(blocked->samples)/(double)total_samples);	
+	double delay_prob = (double)(client_delayed->samples)/(double)total_samples;
+    printf("Probability of delayed client: %f\n", delay_prob);
+	
+    printf("Average time of delayed service: %f\n", ((double)(client_delayed->ammount)/(client_delayed->samples))*delay_prob);
     printf("Probability of delay being less than %f: %f\n\n\n",t ,(double)(less_than_t->samples)/(client_delayed->samples));
   }
 	free(client_delayed);
