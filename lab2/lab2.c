@@ -5,7 +5,6 @@
 #include <string.h>
 #include "lista.h"
 #include "lab2.h"
-#include "stack.h"
 
 
 int main(int argc, char* argv[]){
@@ -17,7 +16,7 @@ int main(int argc, char* argv[]){
   double t=10; //delay
   int m=0; //numero de canais
   int max_buffer=0;
-  	
+
 
   if(strcmp(argv[1],"a")==0){
     printf("Computing a)...\n");
@@ -40,7 +39,7 @@ int main(int argc, char* argv[]){
     dm=2*60;
     m=8;
     k=20; //potenciais clientes
-    l=(double)(12*k)/(double)(60*60); //taxa de chegada de clientes (1/segundo)
+    l=(double)(12)/(double)(60*60); //taxa de chegada de clientes (1/segundo)
   }
 
   if(argc!=2){
@@ -69,7 +68,7 @@ lista* initialize(double dm, double l, int m, int k, char* arg){
 	}
 	if(strcmp("c",arg)==0)
 		init_list = adicionar(init_list, INICIO, exponential((double)l*(k-m)));
-	else 
+	else
 		init_list = adicionar(init_list, INICIO, exponential(l));
 	return init_list;
 }
@@ -96,11 +95,11 @@ void proccess(char* arg ,double dm, double l, double t, int m, int total_samples
 	server->occupied_channels = m; //canais ocupados após inicialização
 	server->clock = 0; //manter controlo da clock do sistema
   server->waiting = 0;
-  struct StackNode* time_stack = NULL;
+  lista  * waiting_list = NULL;
 
   int histograma[30] = {0};
   int interval_nr = sizeof(histograma)/sizeof(histograma[0]);;
-  double interval = 1 / ( 8*l);
+  double interval = 1 / ( 70*l);
 
 	while(server->clients_handled <= total_samples || event_list!=NULL || (server->waiting) > 0){
 
@@ -115,7 +114,8 @@ void proccess(char* arg ,double dm, double l, double t, int m, int total_samples
 			(server->occupied_channels)--;
       if(((strcmp(arg,"b")==0 || strcmp(arg,"c")==0)) && (server->waiting)>0){
         (server->waiting)--;
-        double aux = pop(&time_stack);
+        double aux = waiting_list -> tempo;
+        waiting_list = remover(waiting_list);
         double wait_time = server->clock - aux;
         (client_delayed->ammount) += wait_time;
         if(wait_time < t){
@@ -139,10 +139,10 @@ void proccess(char* arg ,double dm, double l, double t, int m, int total_samples
           blocked->samples++;
           }
 	else if((strcmp(arg,"b")==0 || strcmp(arg,"c")==0) && server->waiting >= max_buffer)
-	  blocked->samples++;	
+	  blocked->samples++;
         else if((strcmp(arg,"b")==0 || strcmp(arg,"c")==0) && server->waiting < max_buffer){
           (server->waiting)++;
-          push(&time_stack, server->clock);
+          waiting_list = adicionar(waiting_list, WAITING , server -> clock);
           (client_delayed->samples)++;
         }
 			}
@@ -153,9 +153,10 @@ void proccess(char* arg ,double dm, double l, double t, int m, int total_samples
 			}
       if(server->clients_handled <= total_samples){
         server->clients_handled++;
-	if(strcmp("c",arg)==0)
-		event_list = adicionar(event_list, INICIO, server -> clock + exponential((double)l*(k-m-server->waiting)));
-	else 
+	if(strcmp("c",arg)==0){
+		event_list = adicionar(event_list, INICIO, server -> clock + exponential((double)l*(k-server->occupied_channels-server->waiting)));
+  }
+	else
 		event_list = adicionar(event_list, INICIO, server -> clock + exponential((double)l));
       }
 		}
@@ -176,10 +177,10 @@ void proccess(char* arg ,double dm, double l, double t, int m, int total_samples
     //passar para o Matlab info sobre valores usados em simulação
     fprintf(f, " %f %d %f %f\n", interval, interval_nr ,client_delayed->samples, (double)(client_delayed->ammount)/(client_delayed->samples));
     fclose(f);
-    printf("Blocked user probability: %f\n", (double)(blocked->samples)/(double)total_samples);	
+    printf("Blocked user probability: %f\n", (double)(blocked->samples)/(double)total_samples);
 	double delay_prob = (double)(client_delayed->samples)/(double)total_samples;
     printf("Probability of delayed client: %f\n", delay_prob);
-	
+
     printf("Average time of delayed service: %f\n", ((double)(client_delayed->ammount)/(client_delayed->samples))*delay_prob);
     printf("Probability of delay being less than %f: %f\n\n\n",t ,(double)(less_than_t->samples)/(client_delayed->samples));
   }

@@ -3,6 +3,7 @@
 
 #define INICIO 0
 #define FIM 1
+#define WAITING 2
 
 typedef struct{
 	int occupied_channels;
