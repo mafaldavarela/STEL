@@ -97,9 +97,12 @@ void proccess(char* arg ,double dm, double l, double t, int m, int total_samples
   server->waiting = 0;
   lista  * waiting_list = NULL;
 
-  int histograma[30] = {0};
+  int histograma[40] = {0};
   int interval_nr = sizeof(histograma)/sizeof(histograma[0]);;
-  double interval = 1 / ( 70*l);
+  double interval = 1 / (3*l);
+  if(strcmp(arg,"c")==0)
+	interval=1/(70*l);
+
 
 	while(server->clients_handled <= total_samples || event_list!=NULL || (server->waiting) > 0){
 
@@ -154,7 +157,7 @@ void proccess(char* arg ,double dm, double l, double t, int m, int total_samples
       if(server->clients_handled <= total_samples){
         server->clients_handled++;
 	if(strcmp("c",arg)==0){
-		event_list = adicionar(event_list, INICIO, server -> clock + exponential((double)l*(k-server->occupied_channels-server->waiting)));
+		event_list = adicionar(event_list, INICIO, server -> clock + exponential((double)l*(k-m-server->waiting)));
   }
 	else
 		event_list = adicionar(event_list, INICIO, server -> clock + exponential((double)l));
