@@ -76,7 +76,9 @@ void imprimir (lista * apontador)
 					printf("Tipo=WAITING_P\tTempo=%lf\n", apontador -> tempo);
 			else if(apontador -> tipo == 9)
 					printf("Tipo=WAITING_P_I\tTempo=%lf\n", apontador -> tempo);
-
+			else if(apontador -> tipo == 10)
+					printf("Tipo=WAITING_I\tTempo=%lf\n", apontador -> tempo);
+					
 			apontador = (lista *)apontador -> proximo;
 		}
 	}

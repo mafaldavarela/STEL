@@ -15,6 +15,8 @@ int main( void ){
   init_variables -> m = 8;
   init_variables -> L = 4;
   init_variables -> K = 20;
+  init_variables -> mi = 1;
+
   double lambda = (double) (600) / (double) 3600;
 
   //initialize
@@ -44,18 +46,19 @@ void proccess(lista * protecao_event_list, variables * init_variables, double la
   server -> protecao -> event_list = protecao_event_list;
   server -> protecao -> waiting_list = NULL;
   server -> protecao -> occupied_channels = init_variables -> m; //canais ocupados após inicialização
-  server -> protecao -> waiting_clients = 0; //canais ocupados após inicialização
+  server -> protecao -> waiting_clients = 0; //clientes à espera na waiting list
 
   server -> inem -> event_list = NULL;
   server -> inem -> waiting_list = NULL;
   server -> inem -> occupied_channels = 0; //canais ocupados após inicialização
-  server -> inem -> waiting_clients = 0; //canais ocupados após inicialização
+  server -> inem -> waiting_clients = 0;  //clientes à espera na waiting list
 
   int total_samples = 1000;
 
   while(server -> clients_handled < total_samples || server -> protecao -> waiting_clients > 0 || server -> protecao -> event_list != NULL){
 
-    //getchar();
+
+    getchar();
     imprimir( server -> protecao -> event_list);
     printf("%d\n\n", server -> clients_handled);
     server -> clock = server -> protecao -> event_list -> tempo;
@@ -106,16 +109,49 @@ void proccess(lista * protecao_event_list, variables * init_variables, double la
       //printf("Found a FIM event!\n");
       (server -> protecao -> occupied_channels)--;
       /*call goes to inem*/
+      if ( server -> protecao -> event_list -> tipo == FIM_P_I && (server -> inem -> occupied_channels) < (init_variables -> mi)  ){
+        server -> inem -> event_list = adicionar (server -> inem -> event_list, FIM_I, time_inem());
+        (server -> inem -> occupied_channels)++;
+      }
+      else if(server -> protecao -> event_list -> tipo == FIM_P_I && (server -> inem -> occupied_channels) >= (init_variables -> mi)){
+        lista * aux = server -> inem -> event_list;
+        for (int i=0; i < server -> inem -> waiting_clients; i++) {
+          aux = server-> inem -> event_list -> proximo;
+        }
+        server -> protecao -> event_list = adicionar(server-> protecao->event_list, WAITING_I, aux-> tempo);
+        printf(" aux->tempo %f\n", aux ->tempo );
+        server -> inem -> waiting_clients++;
+      }
       if((server -> protecao -> waiting_clients > 0 ) && ( server -> protecao -> occupied_channels < init_variables -> m )){
         server -> protecao -> event_list = add_end_event(server -> protecao -> event_list, server -> protecao -> waiting_list -> tipo, server -> clock);
         server -> protecao -> waiting_list = remover( server -> protecao -> waiting_list );
         server -> protecao -> waiting_clients--;
         (server -> protecao -> occupied_channels)++;
       }
-    }
+    /*else if (server -> inem -> event_list -> tipo == FIM_I){
+      (server->inem -> occupied_channels)--;
+      int a=0;
 
-    //imprimir(server -> protecao -> waiting_list);
-    //printf("\n\n");
+      if (server -> inem -> waiting_clients > 0){
+        for (int i=0 ;  a=1 ; i++) {
+
+          server -> protecao -> event_list = (lista *) server-> inem -> event_list -> proximo;
+
+          if (server -> protecao -> event_list -> tipo == WAITING_I){
+
+            server -> inem -> event_list = adicionar (server -> inem -> event_list, INICIO_I, time_inem());
+            server -> inem -> waiting_clients--;
+            (server->inem -> occupied_channels)++;
+            a=1;
+          }
+        }
+      }
+    }*/
+    }
+      printf("waitinglist inem %d\n", server -> inem -> waiting_clients );
+    imprimir(server -> protecao -> waiting_list);
+    imprimir(server -> inem -> event_list);
+    printf("\n\n");
     server -> protecao -> event_list = remover( server -> protecao -> event_list );
   }
   printf("END!\n");
@@ -204,6 +240,19 @@ lista * add_end_event(lista * event_list, int mode, double current_time){
   return adicionar(event_list, type, tempo + current_time);
 }
 
+double time_inem()
+{
+  double min=60;
+  double dm=90;
+
+  double tempo = exponential(dm , FIM_I);
+
+  while( tempo < min)
+    tempo = exponential(dm , FIM_I);
+
+  return tempo;
+
+}
 
 double exponential(double aux , int type){
   double u, c;

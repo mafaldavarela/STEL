@@ -11,6 +11,7 @@
 #define FIM 7
 #define WAITING_P 8
 #define WAITING_P_I 9
+#define WAITING_I 10
 
 typedef struct{
   lista * event_list;
@@ -32,6 +33,7 @@ typedef struct{
 	int L;
 	int K;
   int waiting_buffer_pro;
+  int mi;
 } variables;
 
 double exponential(double aux, int type);
@@ -40,6 +42,9 @@ lista * add_init_event(lista *event_list, int mode, double current_time, double 
 
 lista * add_end_event(lista *event_list, int mode, double current_time);
 
+double time_inem();
+
 void proccess(lista * protecao_event_list, variables * init_variables, double lambda);
+
 
 #endif // LAB3_H_
