@@ -60,10 +60,23 @@ void imprimir (lista * apontador)
 	{
 		while(apontador != NULL)
 		{
-			if(apontador -> tipo == 1)
-				printf("Tipo=FIM\tTempo=%lf\n", apontador -> tempo);
-			else if(apontador -> tipo == 0)
-					printf("Tipo=INICIO\tTempo=%lf\n", apontador -> tempo);
+			if(apontador -> tipo == 0)
+				printf("Tipo=INICIO_P\tTempo=%lf\n", apontador -> tempo);
+			else if(apontador -> tipo == 1)
+					printf("Tipo=INICIO_I\tTempo=%lf\n", apontador -> tempo);
+			else if(apontador -> tipo == 2)
+					printf("Tipo=FIM_P\tTempo=%lf\n", apontador -> tempo);
+			else if(apontador -> tipo == 3)
+					printf("Tipo=FIM_I\tTempo=%lf\n", apontador -> tempo);
+			else if(apontador -> tipo == 4)
+					printf("Tipo=INICIO_P_I\tTempo=%lf\n", apontador -> tempo);
+			else if(apontador -> tipo == 5)
+					printf("Tipo=FIM_P_I\tTempo=%lf\n", apontador -> tempo);
+			else if(apontador -> tipo == 8)
+					printf("Tipo=WAITING_P\tTempo=%lf\n", apontador -> tempo);
+			else if(apontador -> tipo == 9)
+					printf("Tipo=WAITING_P_I\tTempo=%lf\n", apontador -> tempo);
+
 			apontador = (lista *)apontador -> proximo;
 		}
 	}

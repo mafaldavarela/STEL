@@ -15,97 +15,193 @@ int main( void ){
   init_variables -> m = 8;
   init_variables -> L = 4;
   init_variables -> K = 20;
-
   double lambda = (double) (600) / (double) 3600;
 
   //initialize
-  lista  * event_list = NULL;
+  lista  * protecao_event_list = NULL;
   for(int i = 0 ; i < init_variables -> m; i++){
-		event_list = adicionar( event_list, FIM_P , protecao_civil());
+		protecao_event_list = add_init_event(protecao_event_list, FIM, 0, lambda);
 	}
-	event_list = adicionar( event_list, INICIO_P, exponential( lambda , INICIO));
+	protecao_event_list = add_init_event(protecao_event_list, INICIO, 0, lambda);
 
-  imprimir(event_list);
+  proccess(protecao_event_list, init_variables, lambda);
 
   free(init_variables);
 
   return 0;
 }
 
-void proccess(lista *event_list, variables *init_variables) {
+void proccess(lista * protecao_event_list, variables * init_variables, double lambda) {
 
-  servidor *server;
+  servidor * server;
   server = (servidor *)malloc(sizeof (servidor));
+  server -> protecao = (sistema *)malloc(sizeof (sistema));
+  server -> inem = (sistema *)malloc(sizeof (sistema));
 
+  server -> clients_handled = init_variables -> m + 1; //lidamos com m+1 clientes após inicialização
+	server -> clock = 0; //manter controlo da clock do sistema
 
-  server->clients_handled = m+1; //limite da fila de espera NAO SEI QUANTO É
-	server->occupied_channels = m; //canais ocupados após inicialização
-	server->clock = 0; //manter controlo da clock do sistema
-  lista  * waiting_list_P = NULL;
-  lista  * waiting_list_I = NULL;
+  server -> protecao -> event_list = protecao_event_list;
+  server -> protecao -> waiting_list = NULL;
+  server -> protecao -> occupied_channels = init_variables -> m; //canais ocupados após inicialização
+  server -> protecao -> waiting_clients = 0; //canais ocupados após inicialização
 
-  int waiting_inem=0, waiting_pro=0, total_samples;
-  double tempo;
+  server -> inem -> event_list = NULL;
+  server -> inem -> waiting_list = NULL;
+  server -> inem -> occupied_channels = 0; //canais ocupados após inicialização
+  server -> inem -> waiting_clients = 0; //canais ocupados após inicialização
 
-  //As chamadas que encontram o sistema da Proteção Civil bloqueado são colocadas numa fila de espera
-  //de comprimento finito, até ao limite da sua capacidade. Acima desse limite são perdidas.
-  if((event_list->tipo ==INICIO_P) && (server->clients_handled <= waiting_pro) && (server->occupied_channels==init_variables->m) ){
-    waiting_list_P=adicionar(waiting_list_P, WAITING , server -> clock);
-    tempo=tempo+server->clock;
-    total_samples++;
-    printf("waiting time: %f\n",tempo/total_samples );
-    waiting_pro++;
+  int total_samples = 1000;
+
+  while(server -> clients_handled < total_samples || server -> protecao -> waiting_clients > 0 || server -> protecao -> event_list != NULL){
+
+    //getchar();
+    imprimir( server -> protecao -> event_list);
+    printf("%d\n\n", server -> clients_handled);
+    server -> clock = server -> protecao -> event_list -> tempo;
+    //printf("CLOCK: %f\n", server -> clock );
+
+    //As chamadas que encontram o sistema da Proteção Civil bloqueado são colocadas numa fila de espera
+    //de comprimento finito, até ao limie da sua capacidade. Acima desse limite são perdidas.
+    if( server -> protecao -> event_list -> tipo == INICIO_P ){
+      //printf("Found a INICIO_P event!\n");
+      if(server -> protecao -> occupied_channels == init_variables -> m && server -> protecao -> waiting_clients <  init_variables -> L){
+        server -> protecao -> waiting_list = adicionar( server -> protecao-> waiting_list , WAITING_P , server -> clock);
+        (server -> protecao -> waiting_clients)++;
+        //printf("STORED IN WAITING LIST!\n");
+      }
+      else if(server -> protecao -> occupied_channels < init_variables -> m){
+        (server -> protecao -> occupied_channels)++;
+        server -> protecao -> event_list = add_end_event(server -> protecao -> event_list, INICIO_P, server -> clock);
+        //printf("ADDED END EVENT!\n");
+      }
+      if(server -> clients_handled < total_samples){
+        server -> protecao -> event_list = add_init_event( server -> protecao -> event_list , INICIO, server -> clock , lambda);
+        server -> clients_handled ++;
+      }
+      //printf("ADDED INIT EVENT!\n");
+    }
+
+    else if( server -> protecao -> event_list -> tipo == INICIO_P_I ){
+      //printf("Found a INICIO_P_I event!\n");
+      if( server -> protecao -> occupied_channels == init_variables -> m && server -> protecao -> waiting_clients <  init_variables -> L){
+        server -> protecao -> waiting_list = adicionar( server -> protecao -> waiting_list , WAITING_P_I , server -> clock);
+        //printf("STORED IN WAITING LIST!\n");
+        (server -> protecao -> waiting_clients)++;
+      }
+      else if(server -> protecao -> occupied_channels < init_variables -> m){
+        //printf("ADDED END AND INIT EVENT!\n");
+        (server -> protecao -> occupied_channels)++;
+        server -> protecao -> event_list = add_end_event( server -> protecao -> event_list , INICIO_P, server -> clock);
+      }
+      if(server -> clients_handled < total_samples){
+        server -> protecao -> event_list = add_init_event( server -> protecao -> event_list , INICIO, server -> clock, lambda);
+        server -> clients_handled ++;
+    }
+      //printf("ADDED INIT EVENT!\n");
+    }
+
+    // a chamada da Proteção Civil só é libertada quando for atendida pelo INEM.
+    else if ((server -> protecao -> event_list -> tipo == FIM_P) || (server -> protecao -> event_list -> tipo == FIM_P_I)) {
+      //printf("Found a FIM event!\n");
+      (server -> protecao -> occupied_channels)--;
+      /*call goes to inem*/
+      if((server -> protecao -> waiting_clients > 0 ) && ( server -> protecao -> occupied_channels < init_variables -> m )){
+        server -> protecao -> event_list = add_end_event(server -> protecao -> event_list, server -> protecao -> waiting_list -> tipo, server -> clock);
+        server -> protecao -> waiting_list = remover( server -> protecao -> waiting_list );
+        server -> protecao -> waiting_clients--;
+        (server -> protecao -> occupied_channels)++;
+      }
+    }
+
+    //imprimir(server -> protecao -> waiting_list);
+    //printf("\n\n");
+    server -> protecao -> event_list = remover( server -> protecao -> event_list );
   }
-  // a chamada da Proteção Civil só é libertada quando for atendida pelo INEM.
-  else if ( (event_list->tipo==FIM_P) && (waiting_list_P!=NULL) && waiting_inem==0) {
-    waiting_list_P = remover(waiting_list_P);
-    event_list=adicionar(event_list, FIM_P, protecao_civil());
-    waiting_pro--;
-  }
-  //Se o sistema estiver bloqueado, são colocadas numa fila de espera sem limite de capacidade.
-  else if( (event_list->tipo==INICIO_I) && (server->occupied_channels==init_variables->m)){
-    waiting_list_I=adicionar(waiting_list_I, WAITING, server->clock);
-    waiting_inem++;
-  }
-  else if ( ( (event_list->tipo==FIM_I) || (event_list->tipo==FIM_P)) && waiting_list_I!=NULL){
-    waiting_list_I=remover(waiting_list_I);
-    event_list=adicionar(event_list, FIM_I, protecao_civil());
-    waiting_inem--;
-  }
-
+  printf("END!\n");
+  free(server -> inem);
+  free(server -> protecao);
+  free(server);
 }
-double protecao_civil(){
+
+
+lista * add_init_event(lista * event_list, int mode, double current_time, double lambda){
 
   double dm = 0;
-  int min = 0, max = 0;
-  double time_to_inem = 0;
+  int min = 0, max = 0, type = 0;
+
+  //para encher precisamos de definir o evento
   double call_direction = ((double) rand() + 1) / ((double) RAND_MAX + 1);
 
   if( call_direction <= 0.4 ) {
     dm = 1.5*60;
     min = 60;
     max = 4*60;
+    //só passa pela Proteção
+    if(mode == FIM)
+      type = FIM_P;
+    else if(mode == INICIO)
+      type = INICIO_P;
+  }
+  else if( call_direction > 0.4 && call_direction <= 1) {
+    dm = 45;
+    min = 30;
+    max = 75;
+    //depois da Proteção segue para o INEM
+    if(mode == FIM)
+      type = FIM_P_I;
+    else if(mode == INICIO)
+      type = INICIO_P_I;
   }
   else {
+    printf("Error in function add_init_event()");
+    exit(-1);
+    return NULL;
+  }
+  if(mode == FIM){
+    double tempo = exponential(dm , type);
+
+    while( tempo < min && tempo > max)
+      tempo = exponential(dm , type);
+
+    return adicionar(event_list, type, tempo + current_time );
+  }
+  else
+    return adicionar(event_list, type, exponential(lambda , type) + current_time);
+}
+
+lista * add_end_event(lista * event_list, int mode, double current_time){
+
+  double dm = 0;
+  int min = 0, max = 0, type = 0;
+  int aux = 0;
+
+  if( mode == INICIO_P || mode == WAITING_P ) {
+    dm = 1.5*60;
+    min = 60;
+    max = 4*60;
+    //só passa pela Proteção
+    type = FIM_P;
+  }
+  else if( mode == INICIO_P_I || mode == WAITING_P_I) {
     dm = 45;
-    min = 15;
+    min = 30;
     max = 75;
-
-    double time_to_inem = exponential(dm , FIM);
-    while( time_to_inem < min && time_to_inem > max)
-      time_to_inem = exponential(dm , FIM);
-
-    dm = 45;
-    min = 15;
-    max = INT_MAX;
+    //depois da Proteção segue para o INEM
+    type = FIM_P_I;
+  }
+  else {
+    printf("Error in function add_end_event()");
+    exit(-1);
+    return NULL;
   }
 
-  double to_return = exponential(dm , FIM);
+  double tempo = exponential(dm , type);
 
-  while( to_return < min && to_return > max)
-    to_return = exponential(dm , FIM);
+  while( tempo < min && tempo > max)
+    tempo = exponential(dm , type);
 
-  return to_return + time_to_inem;
+  return adicionar(event_list, type, tempo + current_time);
 }
 
 
@@ -117,12 +213,17 @@ double exponential(double aux , int type){
 
   c = 0;
   //normalização para a média de intervalos entre chamadas
-  if( type == INICIO ) {
+  if( type == INICIO_P || type == INICIO_I || type == INICIO_P_I ) {
     c = -log(u)/aux;
   }
-  else if ( type == FIM ){
+  else if ( type == FIM_P || type == FIM_I || type == FIM_P_I ){
     c = -log(u)*aux;
   }
 
+  if( c < 0){
+    printf("Error in function exponential()");
+    exit(-1);
+    return -1;
+  }
   return c;
 }
