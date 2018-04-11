@@ -61,10 +61,10 @@ void proccess(lista * protecao_event_list, variables * init_variables, double la
     if(server -> inem -> occupied_channels == 1 && server -> inem -> waiting_list == 0 && server -> protecao -> event_list == NULL && server -> clients_handled >= total_samples)
       break;
 
-    printf("EVENT LIST PROTECAO\n");
+  /*  printf("EVENT LIST PROTECAO\n");
     imprimir(server -> protecao -> event_list);
     printf("WAITING: %d\n", server -> protecao -> waiting_clients);
-    printf(">>>+1\n");
+    printf(">>>+1\n");*/
     // printf("CLOCK: %f\n", server -> clock );
     // As chamadas que encontram o sistema da Proteção Civil bloqueado são
     // colocadas numa fila de espera de comprimento finito, até ao limite da sua
@@ -141,8 +141,8 @@ void proccess(lista * protecao_event_list, variables * init_variables, double la
       server -> protecao -> event_list = remover(server -> protecao -> event_list);
       (server -> protecao -> occupied_channels)--;
       server -> inem -> waiting_clients--;
-      printf("REMOVED FROM INEM\n");
-      printf("INSERTED TIME %f INEM\n", server->inem->event_list->tempo);
+    //  printf("REMOVED FROM INEM\n");
+    //  printf("INSERTED TIME %f INEM\n", server->inem->event_list->tempo);
       if (server -> protecao -> event_list != NULL) {
         while (server -> protecao -> event_list -> tipo == WAITING_I && server -> protecao -> event_list -> tempo == server -> clock) {
           server -> protecao -> event_list = adicionar(server -> protecao -> event_list, WAITING_I, server -> inem -> event_list -> tempo);
@@ -157,12 +157,12 @@ void proccess(lista * protecao_event_list, variables * init_variables, double la
       }
     }
   }
-  printf("WAITING LIST PROTECAO\n");
+/*  printf("WAITING LIST PROTECAO\n");
   imprimir(server -> protecao -> waiting_list);
   printf("\n\n");
   printf("EVENT LIST INEM\n");
   imprimir(server -> inem -> event_list);
-  printf("\n\n");
+  printf("\n\n");*/
 }
 printf("END!\n");
 free(server -> inem);
@@ -172,7 +172,7 @@ free(server);
 
 lista *add_init_event(lista *event_list, int mode, double current_time, double lambda) {
 
-  double dm = 0;
+  double dm = 0, sigma;
   int min = 0, max = 0, type = 0;
 
   // para encher precisamos de definir o evento
@@ -189,6 +189,7 @@ lista *add_init_event(lista *event_list, int mode, double current_time, double l
       type = INICIO_P;
   } else if (call_direction > 0.4 && call_direction <= 1) {
     dm = 45;
+    sigma=15;
     min = 30;
     max = 75;
     // depois da Proteção segue para o INEM
@@ -255,7 +256,28 @@ double time_inem() {
 
   return tempo;
 }
+double box_muller (double sigma, double mu){
+  double u, v, s, z0;
+  static double z1;
+  static int turn=0;
+  if (turn==1){
+    turn=0;
+     z0=z1;
+   }
+  else{
+    while(s>=1){
+      u = rand() * (1.0 / RAND_MAX);
+      v = rand() * (1.0 / RAND_MAX);
+      s=u*u+v*v;
+    }
+    z0=u*sqrt((-2*log(s))/s);
+    z1=v*sqrt((-2*log(s))/s);
 
+    turn=1;
+  }
+
+  return z0 * sigma + mu;
+}
 double exponential(double aux, int type) {
   double u, c;
 
