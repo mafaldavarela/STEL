@@ -15,7 +15,7 @@ int main(void) {
 
   init_variables->m = 8;
   init_variables->L = 4;
-  init_variables->K = 20;
+  init_variables->k = 20;
   init_variables->mi = 1;
 
   double lambda = (double)(600) / (double)3600;
@@ -25,7 +25,7 @@ int main(void) {
   for (int i = 0 ; i < init_variables -> m ; i++ ) {
     protecao_event_list = add_init_event( protecao_event_list , FIM , 0 , lambda );
   }
-  protecao_event_list = add_init_event( protecao_event_list , INICIO, 0 , lambda );
+  protecao_event_list = add_init_event( protecao_event_list , INICIO, 0 , (double)lambda*(init_variables->k - init_variables->m));
 
   proccess(protecao_event_list, init_variables, lambda);
 
@@ -61,10 +61,11 @@ void proccess(lista * protecao_event_list, variables * init_variables, double la
     if(server -> inem -> occupied_channels == 1 && server -> inem -> waiting_list == 0 && server -> protecao -> event_list == NULL && server -> clients_handled >= total_samples)
       break;
 
-  /*  printf("EVENT LIST PROTECAO\n");
+    getchar();
+    printf("EVENT LIST PROTECAO\n");
     imprimir(server -> protecao -> event_list);
     printf("WAITING: %d\n", server -> protecao -> waiting_clients);
-    printf(">>>+1\n");*/
+    printf(">>>+1\n");
     // printf("CLOCK: %f\n", server -> clock );
     // As chamadas que encontram o sistema da Proteção Civil bloqueado são
     // colocadas numa fila de espera de comprimento finito, até ao limite da sua
@@ -83,7 +84,7 @@ void proccess(lista * protecao_event_list, variables * init_variables, double la
           // printf("ADDED END EVENT!\n");
         }
         if (server -> clients_handled < total_samples) {
-          server -> protecao -> event_list = add_init_event(server -> protecao -> event_list, INICIO, server -> clock, lambda);
+          server -> protecao -> event_list = add_init_event(server -> protecao -> event_list, INICIO, server -> clock, (double)lambda*(init_variables->k-init_variables->m-server->protecao->waiting_clients));
           server -> clients_handled++;
         }
         // printf("ADDED INIT EVENT!\n");
@@ -101,7 +102,7 @@ void proccess(lista * protecao_event_list, variables * init_variables, double la
           server -> protecao -> event_list = add_end_event(server -> protecao -> event_list, INICIO_P, server -> clock);
         }
         if (server -> clients_handled < total_samples) {
-          server -> protecao -> event_list = add_init_event(server -> protecao -> event_list, INICIO, server -> clock, lambda);
+          server -> protecao -> event_list = add_init_event(server -> protecao -> event_list, INICIO, server -> clock, (double)lambda*(init_variables->k-init_variables->m-server->protecao->waiting_clients));
           server -> clients_handled++;
         }
         // printf("ADDED INIT EVENT!\n");
@@ -157,12 +158,12 @@ void proccess(lista * protecao_event_list, variables * init_variables, double la
       }
     }
   }
-/*  printf("WAITING LIST PROTECAO\n");
+  printf("WAITING LIST PROTECAO\n");
   imprimir(server -> protecao -> waiting_list);
   printf("\n\n");
   printf("EVENT LIST INEM\n");
   imprimir(server -> inem -> event_list);
-  printf("\n\n");*/
+  printf("\n\n");
 }
 printf("END!\n");
 free(server -> inem);
@@ -172,8 +173,8 @@ free(server);
 
 lista *add_init_event(lista *event_list, int mode, double current_time, double lambda) {
 
-  double dm = 0, sigma;
-  int min = 0, max = 0, type = 0;
+  double dm = 0, sigma, min = 0, max = 0;
+  int type = 0;
 
   // para encher precisamos de definir o evento
   double call_direction = ((double)rand() + 1) / ((double)RAND_MAX + 1);
@@ -193,8 +194,10 @@ lista *add_init_event(lista *event_list, int mode, double current_time, double l
     min = 30;
     max = 75;
     // depois da Proteção segue para o INEM
-    if (mode == FIM)
-      type = FIM_P_I;
+    if (mode == FIM){
+        type = FIM_P_I;
+        return adicionar(event_list, type, box_muller(sigma, dm, max, min)+current_time);
+    }
     else if (mode == INICIO)
       type = INICIO_P_I;
   } else {
@@ -209,15 +212,15 @@ lista *add_init_event(lista *event_list, int mode, double current_time, double l
       tempo = exponential(dm, type);
 
     return adicionar(event_list, type, tempo + current_time);
-  } else
+  }
+  else
     return adicionar(event_list, type, exponential(lambda, type) + current_time);
 }
 
 lista *add_end_event(lista *event_list, int mode, double current_time) {
 
-  double dm = 0;
-  int min = 0, max = 0, type = 0;
-  int aux = 0;
+  double dm = 0, sigma=0, min = 0, max = 0;
+  int type = 0;
 
   if (mode == INICIO_P || mode == WAITING_P) {
     dm = 1.5 * 60;
@@ -225,24 +228,31 @@ lista *add_end_event(lista *event_list, int mode, double current_time) {
     max = 4 * 60;
     // só passa pela Proteção
     type = FIM_P;
-  } else if (mode == INICIO_P_I || mode == WAITING_P_I) {
+
+    double tempo = exponential(dm, type);
+
+    while (tempo < min && tempo > max)
+      tempo = exponential(dm, type);
+
+    return adicionar(event_list, type, tempo + current_time);
+    }
+
+  else if (mode == INICIO_P_I || mode == WAITING_P_I) {
     dm = 45;
+    sigma=15;
     min = 30;
     max = 75;
     // depois da Proteção segue para o INEM
     type = FIM_P_I;
-  } else {
+    return adicionar(event_list, type, box_muller(sigma, dm, max, min)+current_time);
+  }
+
+  else {
     printf("Error in function add_end_event()");
     exit(-1);
     return NULL;
   }
 
-  double tempo = exponential(dm, type);
-
-  while (tempo < min && tempo > max)
-    tempo = exponential(dm, type);
-
-  return adicionar(event_list, type, tempo + current_time);
 }
 
 double time_inem() {
@@ -256,8 +266,8 @@ double time_inem() {
 
   return tempo;
 }
-double box_muller (double sigma, double mu){
-  double u, v, s, z0;
+double box_muller (double sigma, double mu, double max, double min){
+  double u=0, v=0, s=0, z0, tempo;
   static double z1;
   static int turn=0;
   if (turn==1){
@@ -265,18 +275,25 @@ double box_muller (double sigma, double mu){
      z0=z1;
    }
   else{
-    while(s>=1){
-      u = rand() * (1.0 / RAND_MAX);
-      v = rand() * (1.0 / RAND_MAX);
+    do{
+
+      u =-1+2*((double)rand())/(double)RAND_MAX;
+      v =-1+2*((double)rand())/(double)RAND_MAX;
       s=u*u+v*v;
-    }
-    z0=u*sqrt((-2*log(s))/s);
-    z1=v*sqrt((-2*log(s))/s);
+    } while(s>=1);
+    z0=u*sqrt((double)(-2*(double)(log(s))/s));
+    z1=v*sqrt((double)(-2*(double)(log(s))/s));
 
     turn=1;
+
   }
 
-  return z0 * sigma + mu;
+  tempo = (double)(z0 * sigma + mu);
+
+    if (tempo < min && tempo > max)
+        return box_muller(sigma, mu, max, min);
+    //printf(" %f\n", tempo);
+  return tempo;
 }
 double exponential(double aux, int type) {
   double u, c;

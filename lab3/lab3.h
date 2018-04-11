@@ -31,7 +31,7 @@ typedef struct{
 typedef struct{
 	int m;
 	int L;
-	int K;
+	int k;
   int waiting_buffer_pro;
   int mi;
 } variables;
@@ -44,7 +44,7 @@ lista * add_end_event(lista *event_list, int mode, double current_time);
 
 double time_inem();
 
-double box_muller (double sigma, double mu);
+double box_muller (double sigma, double mu, double max, double min);
 
 void proccess(lista * protecao_event_list, variables * init_variables, double lambda);
 
