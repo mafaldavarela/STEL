@@ -27,6 +27,18 @@ typedef struct{
 	double clock;
 } servidor;
 
+typedef struct{
+  int samples;
+  int ammount;
+} probability;
+
+typedef struct{
+	double delay_prob;
+	double lost_prob;
+  double avg_delay;
+  double total_delay;
+} resultados;
+
 
 typedef struct{
 	int m;
@@ -46,7 +58,7 @@ double time_inem();
 
 double box_muller (double sigma, double mu, double max, double min);
 
-void proccess(lista * protecao_event_list, variables * init_variables, double lambda);
+resultados * proccess(lista * protecao_event_list, variables * init_variables, double lambda);
 
 
 #endif // LAB3_H_
