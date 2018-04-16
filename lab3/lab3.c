@@ -13,29 +13,32 @@ int main(void) {
 
   variables *init_variables = malloc(sizeof(variables));
 
-  init_variables->m = 1;
+  init_variables->m = 10;
   init_variables->L = 1;
-  init_variables->k = 200000; //infinite
+  init_variables->k = 20000; //infinite
   init_variables->mi = 1;
 
   double lambda = (double)(600) / (double)3600;
 
   // initialize
   int found = 0;
-  int turn = 0;
   resultados * results;
+  FILE *f;
+  f = fopen("results.txt", "wb");
   printf("Trying with {m = %d ; L = %d ; mi = %d}\n", init_variables->m , init_variables->L , init_variables->mi);
   while(!found){
-    double epsilon = 0.025;
-    double epsilon1 = 0.025;
-    double epsilon2 = 5;
-    double epsilon3 = 5;
+    double epsilon = 0.02;
+    double epsilon1 = 0.02;
+    double epsilon2 = 2;
+    double epsilon3 = 2;
     lista * protecao_event_list = NULL;
+    int counter = 0;
     for (int i = 0 ; i < init_variables -> m ; i++ ) {
       protecao_event_list = add_init_event( protecao_event_list , FIM , 0 , lambda );
     }
     protecao_event_list = add_init_event( protecao_event_list , INICIO, 0 , (double)lambda);
     results = proccess(protecao_event_list, init_variables, lambda);
+    printf("With {m = %d ; L = %d ; mi = %d}\n", init_variables->m , init_variables->L , init_variables->mi);
     if((fabs(results -> delay_prob - 0.2) <= epsilon) && (fabs(results -> lost_prob - 0.01) <= epsilon1) && (fabs(results -> avg_delay - 30) <= epsilon2) && (fabs(results -> total_delay - 60)) <= epsilon3){
       printf("\n\nFOUND!!!\n");
       printf("With {m = %d ; L = %d ; mi = %d}\n", init_variables->m , init_variables->L , init_variables->mi);
@@ -45,23 +48,41 @@ int main(void) {
       printf("Avg. delay Total: %f\n", results -> total_delay);
       found = 1;
     }
-      if(init_variables -> mi < 20){
+    if((fabs(results -> delay_prob - 0.2) <= epsilon)) counter++;
+    if(fabs(results -> lost_prob - 0.01) <= epsilon1) counter++;
+    if(fabs(results -> avg_delay - 30) <= epsilon2) counter++;
+    if(fabs(results -> total_delay - 60) <= epsilon3) counter++;
+    if(counter>=3){
+      printf("With {m = %d ; L = %d ; mi = %d}\n", init_variables->m , init_variables->L , init_variables->mi);
+      printf("Delay calls prob. at prot.: %f\n", results -> delay_prob);
+      printf("Lost calls prob: %f\n", results -> lost_prob);
+      printf("Avg. delay Prot: %f\n", results -> avg_delay);
+      printf("Avg. delay Total: %f\n", results -> total_delay);
+      fprintf(f,"With {m = %d ; L = %d ; mi = %d}\n", init_variables->m , init_variables->L , init_variables->mi);
+      fprintf(f,"Delay calls prob. at prot.: %f\n", results -> delay_prob);
+      fprintf(f,"Lost calls prob: %f\n", results -> lost_prob);
+      fprintf(f,"Avg. delay Prot: %f\n", results -> avg_delay);
+      fprintf(f,"Avg. delay Total: %f\n", results -> total_delay);
+
+    }
+      if(init_variables -> mi < 30){
         init_variables -> mi++;
       }
       else{
         init_variables -> L++;
         init_variables -> mi = 1;
-        if(init_variables -> L > 20){
+        if(init_variables -> L > 30){
           init_variables -> m ++;
           init_variables -> L = 1;
           init_variables -> mi = 1;
         }
-        printf("Trying with {m = %d ; L = %d ; mi = %d}\n", init_variables->m , init_variables->L , init_variables->mi);
       }
-    free(results);
-    if(init_variables -> m > 20)
+
+    if(init_variables -> m > 30)
       break;
+    free(results);
   }
+  fclose(f);
   free(init_variables);
   return 0;
 }
@@ -100,7 +121,7 @@ resultados * proccess(lista * protecao_event_list, variables * init_variables, d
   average_error -> samples = 0;
   average_error -> ammount = 0;
 
-  int total_samples = 10000;
+  int total_samples = 1000000;
   while (server -> clients_handled < total_samples || server -> protecao -> waiting_clients > 0 || server-> protecao -> event_list != NULL || server -> inem -> event_list != NULL ){
 
     if(server -> inem -> waiting_list == 0 && server -> protecao -> occupied_channels == 0 && server -> clients_handled >= total_samples){
@@ -110,72 +131,76 @@ resultados * proccess(lista * protecao_event_list, variables * init_variables, d
       }
       break;
     }
-    /*printf("Trying with {m = %d ; L = %d ; mi = %d}\n", init_variables->m , init_variables->L , init_variables->mi);
+    /*getchar();
     printf("EVENT LIST PROTECAO\n");
     imprimir(server -> protecao -> event_list);
     printf("WAITING: %d\n", server -> protecao -> waiting_clients);
-    printf(">>>+1\n");*/
-    // printf("CLOCK: %f\n", server -> clock );
+    printf(">>>+1\n");
+    printf("CLOCK: %f\n", server -> clock );*/
     // As chamadas que encontram o sistema da Proteção Civil bloqueado são
     // colocadas numa fila de espera de comprimento finito, até ao limite da sua
     // capacidade. Acima desse limite são perdidas.
     if (server -> inem -> event_list == NULL || (server -> protecao != NULL && server -> protecao -> event_list -> tempo < server -> inem -> event_list -> tempo)) {
       server -> clock = server -> protecao -> event_list -> tempo;
       if (server -> protecao -> event_list -> tipo == INICIO_P) {
-        // printf("Found a INICIO_P event!\n");
+      //  printf("Found a INICIO_P event!\n");
         if (server -> protecao -> occupied_channels == init_variables -> m && server -> protecao -> waiting_clients < init_variables -> L) {
           server -> protecao -> waiting_list = adicionar(server -> protecao -> waiting_list, WAITING_P, server -> clock);
           (server -> protecao -> waiting_clients)++;
-          // printf("STORED IN WAITING LIST!\n");
+        //  printf("STORED IN WAITING LIST!\n");
         } else if ( server -> protecao -> occupied_channels < init_variables -> m) {
           (server -> protecao -> occupied_channels)++;
           server -> protecao -> event_list = add_end_event(server -> protecao -> event_list, INICIO_P, server -> clock);
-          // printf("ADDED END EVENT!\n");
+        //  printf("ADDED END EVENT!\n");
         } else if(server -> protecao -> occupied_channels == init_variables -> m && server -> protecao -> waiting_clients == init_variables -> L){
           (lost_calls -> samples) ++;
+        //  printf("EVENT LOST!\n");
         }
         if (server -> clients_handled < total_samples) {
           server -> protecao -> event_list = add_init_event(server -> protecao -> event_list, INICIO, server -> clock, (double)lambda);
           server -> clients_handled++;
+        //  printf("ADDED INIT EVENT!\n");
         }
 
       }
 
       else if (server -> protecao -> event_list -> tipo == INICIO_P_I) {
-        // printf("Found a INICIO_P_I event!\n");
+        //printf("Found a INICIO_P_I event!\n");
         if (server -> protecao -> occupied_channels == init_variables -> m && server -> protecao -> waiting_clients < init_variables -> L) {
           server -> protecao -> waiting_list = adicionar(server -> protecao -> waiting_list, WAITING_P_I, server -> clock);
-          // printf("STORED IN WAITING LIST!\n");
+        //  printf("STORED IN WAITING LIST!\n");
           (server -> protecao -> waiting_clients)++;
         } else if (server -> protecao -> occupied_channels < init_variables -> m) {
-          // printf("ADDED END AND INIT EVENT!\n");
+        //  printf("ADDED END EVENT!\n");
           (server -> protecao -> occupied_channels)++;
           server -> protecao -> event_list = add_end_event(server -> protecao -> event_list, INICIO_P, server -> clock);
         } else if(server -> protecao -> occupied_channels == init_variables -> m && server -> protecao -> waiting_clients == init_variables -> L){
           (lost_calls -> samples) ++;
-          //printf("LOST CALL\n");
+        //  printf("EVENT LOST!\n");
         }
         if (server -> clients_handled < total_samples) {
           server -> protecao -> event_list = add_init_event(server -> protecao -> event_list, INICIO, server -> clock, (double)lambda);
           server -> clients_handled++;
+        //  printf("ADDED INIT EVENT!\n");
         }
-        // printf("ADDED INIT EVENT!\n");
       }
 
       // a chamada da Proteção Civil só é libertada quando for atendida pelo
       // INEM.
       else if ((server -> protecao -> event_list -> tipo == FIM_P) || (server -> protecao -> event_list -> tipo == FIM_P_I)) {
-        // printf("Found a FIM event!\n");
+        //printf("Found a FIM event!\n");
         (server -> protecao -> occupied_channels)--;
         /*call goes to inem*/
         if (server -> protecao -> event_list -> tipo == FIM_P_I && (server -> inem -> occupied_channels) < (init_variables -> mi)) {
           server -> inem -> event_list = adicionar(server -> inem -> event_list, FIM_I, server -> clock + time_inem());
           (server -> inem -> occupied_channels)++;
+          //printf("ADDED EVENT TO INEM!\n");
         } else if (server -> protecao -> event_list -> tipo == FIM_P_I && (server -> inem -> occupied_channels) >= (init_variables -> mi)) {
           server -> protecao -> event_list = adicionar(server -> protecao -> event_list, WAITING_I, server -> inem -> event_list -> tempo);
           (server -> protecao -> occupied_channels)++;
           server -> inem -> waiting_list = adicionar(server -> inem -> waiting_list, WAITING_I, server -> clock);
           server -> inem -> waiting_clients++;
+        //  printf("INEM EVENT WAITING IN PROTECAO!\n");
         }
         if ((server -> protecao -> waiting_clients > 0) && (server -> protecao -> occupied_channels < init_variables -> m)) {
           server -> protecao -> event_list = add_end_event(server -> protecao -> event_list,server -> protecao -> waiting_list -> tipo, server -> clock);
@@ -190,10 +215,12 @@ resultados * proccess(lista * protecao_event_list, variables * init_variables, d
         server -> protecao -> event_list = remover(server -> protecao -> event_list);
     }
   else if(server -> inem -> event_list != NULL){
+  //  printf("Found a FIM inem event!\n");
     server -> clock = server -> inem -> event_list -> tempo;
     server -> inem -> event_list = remover(server -> inem -> event_list);
     (server -> inem -> occupied_channels)--;
     if (server -> protecao -> event_list -> tipo == WAITING_I) {
+    //  printf("INSERTED TO INEM FROM WAITING!\n");
       server -> inem -> event_list = adicionar(server -> inem -> event_list, FIM_I, server -> clock + time_inem());
       (server -> inem -> occupied_channels)++;
       server -> protecao -> event_list = remover(server -> protecao -> event_list);
@@ -220,6 +247,7 @@ resultados * proccess(lista * protecao_event_list, variables * init_variables, d
         server -> inem -> waiting_list = remover(server -> inem -> waiting_list);;
       }
       if (server -> protecao -> waiting_clients > 0) {
+      //  printf("INSERTED TO PROTECAO FROM WAITING!\n");
         server -> protecao -> event_list = add_end_event(server -> protecao -> event_list, server -> protecao -> waiting_list -> tipo, server -> clock);
         server -> protecao -> waiting_list = remover(server -> protecao -> waiting_list);
         server -> protecao -> waiting_clients--;
