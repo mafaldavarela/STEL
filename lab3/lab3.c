@@ -13,8 +13,8 @@ int main(void) {
 
   variables *init_variables = malloc(sizeof(variables));
 
-  init_variables->m = 10;
-  init_variables->L = 1;
+  init_variables->m = 15;
+  init_variables->L = 30;
   init_variables->k = 20000; //infinite
   init_variables->mi = 1;
 
@@ -24,7 +24,7 @@ int main(void) {
   int found = 0;
   resultados * results;
   FILE *f;
-  f = fopen("results.txt", "wb");
+  f = fopen("results.txt", "a+");
   printf("Trying with {m = %d ; L = %d ; mi = %d}\n", init_variables->m , init_variables->L , init_variables->mi);
   while(!found){
     double epsilon = 0.02;
@@ -38,7 +38,6 @@ int main(void) {
     }
     protecao_event_list = add_init_event( protecao_event_list , INICIO, 0 , (double)lambda);
     results = proccess(protecao_event_list, init_variables, lambda);
-    printf("With {m = %d ; L = %d ; mi = %d}\n", init_variables->m , init_variables->L , init_variables->mi);
     if((fabs(results -> delay_prob - 0.2) <= epsilon) && (fabs(results -> lost_prob - 0.01) <= epsilon1) && (fabs(results -> avg_delay - 30) <= epsilon2) && (fabs(results -> total_delay - 60)) <= epsilon3){
       printf("\n\nFOUND!!!\n");
       printf("With {m = %d ; L = %d ; mi = %d}\n", init_variables->m , init_variables->L , init_variables->mi);
@@ -46,6 +45,13 @@ int main(void) {
       printf("Lost calls prob: %f\n", results -> lost_prob);
       printf("Avg. delay Prot: %f\n", results -> avg_delay);
       printf("Avg. delay Total: %f\n", results -> total_delay);
+      fprintf(f, "\n\nFOUND!!!\n");
+      fprintf(f,"With {m = %d ; L = %d ; mi = %d}\n", init_variables->m , init_variables->L , init_variables->mi);
+      fprintf(f,"Delay calls prob. at prot.: %f\n", results -> delay_prob);
+      fprintf(f,"Lost calls prob: %f\n", results -> lost_prob);
+      fprintf(f,"Avg. delay Prot: %f\n", results -> avg_delay);
+      fprintf(f,"Avg. delay Total: %f\n", results -> total_delay);
+      fprintf(f,"------------------------\n\n");
       found = 1;
     }
     if((fabs(results -> delay_prob - 0.2) <= epsilon)) counter++;
@@ -63,22 +69,24 @@ int main(void) {
       fprintf(f,"Lost calls prob: %f\n", results -> lost_prob);
       fprintf(f,"Avg. delay Prot: %f\n", results -> avg_delay);
       fprintf(f,"Avg. delay Total: %f\n", results -> total_delay);
+      fprintf(f,"------------------------\n\n");
 
     }
-      if(init_variables -> mi < 30){
+      if(init_variables -> mi < 40){
         init_variables -> mi++;
       }
       else{
         init_variables -> L++;
         init_variables -> mi = 1;
-        if(init_variables -> L > 30){
+        if(init_variables -> L > 40){
           init_variables -> m ++;
-          init_variables -> L = 1;
+          init_variables -> L = 30;
           init_variables -> mi = 1;
         }
+        printf("Trying with {m = %d ; L = %d ; mi = %d}\n", init_variables->m , init_variables->L , init_variables->mi);
       }
 
-    if(init_variables -> m > 30)
+    if(init_variables -> m > 20)
       break;
     free(results);
   }
