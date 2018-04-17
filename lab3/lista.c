@@ -9,7 +9,7 @@ lista * remover (lista * apontador)
 	return lap;
 }
 
-lista * adicionar (lista * apontador, int n_tipo, double n_tempo)
+lista * adicionar (lista * apontador, int n_tipo, double n_tempo, double n_previsao, double n_inicio)
 {
 	lista * lap = apontador;
 	lista * ap_aux, * ap_next;
@@ -19,6 +19,8 @@ lista * adicionar (lista * apontador, int n_tipo, double n_tempo)
 		apontador -> proximo = NULL;
 		apontador -> tipo = n_tipo;
 		apontador -> tempo = n_tempo;
+		apontador -> previsao = n_previsao;
+		apontador -> inicio = n_inicio;
 		return apontador;
 	}
 	else
@@ -27,6 +29,8 @@ lista * adicionar (lista * apontador, int n_tipo, double n_tempo)
 	        ap_aux = (lista *) malloc(sizeof (lista));
 	        ap_aux -> tipo = n_tipo;
             ap_aux -> tempo = n_tempo;
+						ap_aux -> previsao = n_previsao;
+						ap_aux -> inicio = n_inicio;
             ap_aux -> proximo = (struct lista *) apontador;
             return ap_aux;
 	    }
@@ -48,6 +52,8 @@ lista * adicionar (lista * apontador, int n_tipo, double n_tempo)
 			apontador -> proximo = NULL;
 		apontador -> tipo = n_tipo;
 		apontador -> tempo = n_tempo;
+		apontador -> previsao = n_previsao;
+		apontador -> inicio = n_inicio;
 		return lap;
 	}
 }
@@ -71,14 +77,14 @@ void imprimir (lista * apontador)
 			else if(apontador -> tipo == 4)
 					printf("Tipo=INICIO_P_I\tTempo=%lf\n", apontador -> tempo);
 			else if(apontador -> tipo == 5)
-					printf("Tipo=FIM_P_I\tTempo=%lf\n", apontador -> tempo);
+					printf("Tipo=FIM_P_I\tTempo=%lf\tInicio=%lf\n", apontador -> tempo, apontador -> inicio);
 			else if(apontador -> tipo == 8)
 					printf("Tipo=WAITING_P\tTempo=%lf\n", apontador -> tempo);
 			else if(apontador -> tipo == 9)
 					printf("Tipo=WAITING_P_I\tTempo=%lf\n", apontador -> tempo);
 			else if(apontador -> tipo == 10)
-					printf("Tipo=WAITING_I\tTempo=%lf\n", apontador -> tempo);
-					
+					printf("Tipo=WAITING_I\tTempo=%lf\tInicio=%lf\n", apontador -> tempo, apontador -> inicio);
+
 			apontador = (lista *)apontador -> proximo;
 		}
 	}

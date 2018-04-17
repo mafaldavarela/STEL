@@ -13,8 +13,8 @@ int main(void) {
 
   variables *init_variables = malloc(sizeof(variables));
 
-  init_variables->m = 15;
-  init_variables->L = 30;
+  init_variables->m = 1;
+  init_variables->L = 1;
   init_variables->k = 20000; //infinite
   init_variables->mi = 1;
 
@@ -28,7 +28,7 @@ int main(void) {
   printf("Trying with {m = %d ; L = %d ; mi = %d}\n", init_variables->m , init_variables->L , init_variables->mi);
   while(!found){
     double epsilon = 0.02;
-    double epsilon1 = 0.02;
+    double epsilon1 = 0.01;
     double epsilon2 = 2;
     double epsilon3 = 2;
     lista * protecao_event_list = NULL;
@@ -52,7 +52,7 @@ int main(void) {
       fprintf(f,"Avg. delay Prot: %f\n", results -> avg_delay);
       fprintf(f,"Avg. delay Total: %f\n", results -> total_delay);
       fprintf(f,"------------------------\n\n");
-      found = 1;
+      //found = 1;
     }
     if((fabs(results -> delay_prob - 0.2) <= epsilon)) counter++;
     if(fabs(results -> lost_prob - 0.01) <= epsilon1) counter++;
@@ -76,17 +76,18 @@ int main(void) {
         init_variables -> mi++;
       }
       else{
+        printf("Ended at {m = %d ; L = %d ; mi = %d}\n", init_variables->m , init_variables->L , init_variables->mi);
         init_variables -> L++;
         init_variables -> mi = 1;
         if(init_variables -> L > 40){
           init_variables -> m ++;
-          init_variables -> L = 30;
+          init_variables -> L = 1;
           init_variables -> mi = 1;
         }
         printf("Trying with {m = %d ; L = %d ; mi = %d}\n", init_variables->m , init_variables->L , init_variables->mi);
       }
 
-    if(init_variables -> m > 20)
+    if(init_variables -> m > 30)
       break;
     free(results);
   }
@@ -114,6 +115,7 @@ resultados * proccess(lista * protecao_event_list, variables * init_variables, d
   server -> inem -> occupied_channels = 0; // canais ocupados após inicialização
   server -> inem -> waiting_clients = 0;   // clientes à espera na waiting list
 
+
   probability * lost_calls = (probability *)malloc(sizeof(probability));
   lost_calls -> samples = 0;
 
@@ -125,10 +127,13 @@ resultados * proccess(lista * protecao_event_list, variables * init_variables, d
   average_delay_total -> samples = 0;
   average_delay_total -> ammount = 0;
 
-  probability * average_error = (probability *)malloc(sizeof(probability));
-  average_error -> samples = 0;
-  average_error -> ammount = 0;
+  probability * average_absolute_error = (probability *)malloc(sizeof(probability));
+  average_absolute_error -> samples = 0;
+  average_absolute_error -> ammount = 0;
 
+  int vetor[40] = {0};
+  double interval = 0.1;
+  int vetor_size = sizeof(vetor)/sizeof(vetor[0]);
   int total_samples = 1000000;
   while (server -> clients_handled < total_samples || server -> protecao -> waiting_clients > 0 || server-> protecao -> event_list != NULL || server -> inem -> event_list != NULL ){
 
@@ -143,8 +148,7 @@ resultados * proccess(lista * protecao_event_list, variables * init_variables, d
     printf("EVENT LIST PROTECAO\n");
     imprimir(server -> protecao -> event_list);
     printf("WAITING: %d\n", server -> protecao -> waiting_clients);
-    printf(">>>+1\n");
-    printf("CLOCK: %f\n", server -> clock );*/
+    printf(">>>+1\n");*/
     // As chamadas que encontram o sistema da Proteção Civil bloqueado são
     // colocadas numa fila de espera de comprimento finito, até ao limite da sua
     // capacidade. Acima desse limite são perdidas.
@@ -153,7 +157,7 @@ resultados * proccess(lista * protecao_event_list, variables * init_variables, d
       if (server -> protecao -> event_list -> tipo == INICIO_P) {
       //  printf("Found a INICIO_P event!\n");
         if (server -> protecao -> occupied_channels == init_variables -> m && server -> protecao -> waiting_clients < init_variables -> L) {
-          server -> protecao -> waiting_list = adicionar(server -> protecao -> waiting_list, WAITING_P, server -> clock);
+          server -> protecao -> waiting_list = adicionar(server -> protecao -> waiting_list, WAITING_P, server -> clock, 0, server->clock);
           (server -> protecao -> waiting_clients)++;
         //  printf("STORED IN WAITING LIST!\n");
         } else if ( server -> protecao -> occupied_channels < init_variables -> m) {
@@ -175,7 +179,7 @@ resultados * proccess(lista * protecao_event_list, variables * init_variables, d
       else if (server -> protecao -> event_list -> tipo == INICIO_P_I) {
         //printf("Found a INICIO_P_I event!\n");
         if (server -> protecao -> occupied_channels == init_variables -> m && server -> protecao -> waiting_clients < init_variables -> L) {
-          server -> protecao -> waiting_list = adicionar(server -> protecao -> waiting_list, WAITING_P_I, server -> clock);
+          server -> protecao -> waiting_list = adicionar(server -> protecao -> waiting_list, WAITING_P_I, server -> clock, 0, server->clock);
         //  printf("STORED IN WAITING LIST!\n");
           (server -> protecao -> waiting_clients)++;
         } else if (server -> protecao -> occupied_channels < init_variables -> m) {
@@ -200,13 +204,21 @@ resultados * proccess(lista * protecao_event_list, variables * init_variables, d
         (server -> protecao -> occupied_channels)--;
         /*call goes to inem*/
         if (server -> protecao -> event_list -> tipo == FIM_P_I && (server -> inem -> occupied_channels) < (init_variables -> mi)) {
-          server -> inem -> event_list = adicionar(server -> inem -> event_list, FIM_I, server -> clock + time_inem());
+          server -> inem -> event_list = adicionar(server -> inem -> event_list, FIM_I, server -> clock + time_inem(), 0, server->clock);
           (server -> inem -> occupied_channels)++;
           //printf("ADDED EVENT TO INEM!\n");
         } else if (server -> protecao -> event_list -> tipo == FIM_P_I && (server -> inem -> occupied_channels) >= (init_variables -> mi)) {
-          server -> protecao -> event_list = adicionar(server -> protecao -> event_list, WAITING_I, server -> inem -> event_list -> tempo);
+          //HERE
+            if(average_absolute_error -> samples == 0){
+              server -> inem -> waiting_list = adicionar(server -> inem -> waiting_list, WAITING_I, server -> clock, 0, server-> protecao -> event_list -> inicio);
+              server -> protecao -> event_list = adicionar(server -> protecao -> event_list, WAITING_I, server -> inem -> event_list -> tempo, 0, server->clock);
+            }
+            else{
+              double prediction = (double) (average_absolute_error -> ammount) /  (double)(average_absolute_error -> samples);
+              server -> inem -> waiting_list = adicionar(server -> inem -> waiting_list, WAITING_I, server -> clock, prediction, server-> protecao -> event_list -> inicio);
+              server -> protecao -> event_list = adicionar(server -> protecao -> event_list, WAITING_I, server -> inem -> event_list -> tempo, 0, server->clock);
+            }
           (server -> protecao -> occupied_channels)++;
-          server -> inem -> waiting_list = adicionar(server -> inem -> waiting_list, WAITING_I, server -> clock);
           server -> inem -> waiting_clients++;
         //  printf("INEM EVENT WAITING IN PROTECAO!\n");
         }
@@ -229,25 +241,31 @@ resultados * proccess(lista * protecao_event_list, variables * init_variables, d
     (server -> inem -> occupied_channels)--;
     if (server -> protecao -> event_list -> tipo == WAITING_I) {
     //  printf("INSERTED TO INEM FROM WAITING!\n");
-      server -> inem -> event_list = adicionar(server -> inem -> event_list, FIM_I, server -> clock + time_inem());
+      server -> inem -> event_list = adicionar(server -> inem -> event_list, FIM_I, server -> clock + time_inem(), 0, server->clock);
       (server -> inem -> occupied_channels)++;
       server -> protecao -> event_list = remover(server -> protecao -> event_list);
       (server -> protecao -> occupied_channels)--;
       if( server -> inem -> waiting_clients > 0 ){
         average_delay_total -> samples ++;
-        average_delay_total -> ammount += (server -> clock - server -> inem -> waiting_list -> tempo);
-        if(average_error -> samples == 0){
-          average_error -> samples++;
-          average_error -> ammount = (server -> clock - server -> inem -> waiting_list -> tempo);
+        average_delay_total -> ammount += (server -> clock - server -> inem -> waiting_list -> inicio);
+        if(average_absolute_error -> samples == 0){
+          average_absolute_error -> samples++;
+          average_absolute_error -> ammount = (server -> clock - server -> inem -> waiting_list -> tempo);
+          vetor[20]++;
         }
         else {
-          double prediction = (double) (average_error -> ammount) /  (double)(average_error -> samples);
-          average_error -> samples++;
-          average_error -> ammount += (double)(server -> clock - server -> inem -> waiting_list -> tempo - prediction);
+          average_absolute_error -> samples++;
+          average_absolute_error -> ammount += (double)(server -> clock - server -> inem -> waiting_list -> tempo - server -> inem -> waiting_list -> previsao);
+          double value = (server -> clock - server -> inem -> waiting_list -> tempo - server -> inem -> waiting_list -> previsao)/(server -> inem -> waiting_list -> previsao);
+          double pos = (value/interval);
+          printf("From x=%f x'=%f\n",server -> clock - server -> inem -> waiting_list -> tempo,server -> inem -> waiting_list -> previsao );
+          printf("Got pos %f\n",pos );
+          if(pos <= 20 && pos >=-20)
+            vetor[(int)(pos+20)]++;
         }
         if (server -> protecao -> event_list != NULL) {
           while (server -> protecao -> event_list -> tipo == WAITING_I && server -> protecao -> event_list -> tempo == server -> clock) {
-            server -> protecao -> event_list = adicionar(server -> protecao -> event_list, WAITING_I, server -> inem -> event_list -> tempo);
+            server -> protecao -> event_list = adicionar(server -> protecao -> event_list, WAITING_I, server -> inem -> event_list -> tempo, 0, server->clock);
             server -> protecao -> event_list = remover(server -> protecao -> event_list);
           }
         }
@@ -263,7 +281,8 @@ resultados * proccess(lista * protecao_event_list, variables * init_variables, d
       }
     }
   }
-  /*printf("WAITING LIST PROTECAO\n");
+  /*printf("CLOCK: %f\n", server -> clock );
+  printf("WAITING LIST PROTECAO\n");
   imprimir(server -> protecao -> waiting_list);
   printf("---------\n");
   printf("EVENT LIST INEM\n");
@@ -277,16 +296,23 @@ results -> delay_prob = (double) (average_delay -> samples) /  (double)(total_sa
 results -> lost_prob = (double) (lost_calls -> samples) /  (double)(total_samples);
 results -> avg_delay = (double) (average_delay -> ammount) /  (double)(average_delay -> samples);
 results -> total_delay = (double) (average_delay_total -> ammount) /  (double)(average_delay_total -> samples);
+
+FILE *fptr;
+fptr = fopen("histogram.txt", "wb");
+for(int i=0; i < vetor_size; i++){
+    fprintf(fptr, "%d\n", vetor[i]);
+  }
+
 if(average_delay_total -> samples == 0)
   results -> total_delay = 0;
-//printf("Avg. error: %f\n", (double) (average_error -> ammount) /  (double)(average_error -> samples));
+//printf("Avg. error: %f\n", (double) (average_absolute_error -> ammount) /  (double)(average_absolute_error -> samples));
 free(server -> inem);
 free(server -> protecao);
 free(server);
 free(lost_calls);
 free(average_delay);
 free(average_delay_total);
-free(average_error);
+free(average_absolute_error);
 return results;
 }
 
@@ -315,7 +341,7 @@ lista *add_init_event(lista *event_list, int mode, double current_time, double l
     // depois da Proteção segue para o INEM
     if (mode == FIM){
         type = FIM_P_I;
-        return adicionar(event_list, type, box_muller(sigma, dm, max, min)+current_time);
+        return adicionar(event_list, type, box_muller(sigma, dm, max, min)+current_time, 0, current_time);
     }
     else if (mode == INICIO)
       type = INICIO_P_I;
@@ -330,10 +356,10 @@ lista *add_init_event(lista *event_list, int mode, double current_time, double l
     while (tempo < min && tempo > max)
       tempo = exponential(dm, type);
 
-    return adicionar(event_list, type, tempo + current_time);
+    return adicionar(event_list, type, tempo + current_time, 0, current_time);
   }
   else
-    return adicionar(event_list, type, exponential(lambda, type) + current_time);
+    return adicionar(event_list, type, exponential(lambda, type) + current_time, 0, current_time);
 }
 
 lista *add_end_event(lista *event_list, int mode, double current_time) {
@@ -353,7 +379,7 @@ lista *add_end_event(lista *event_list, int mode, double current_time) {
     while (tempo < min && tempo > max)
       tempo = exponential(dm, type);
 
-    return adicionar(event_list, type, tempo + current_time);
+    return adicionar(event_list, type, tempo + current_time, 0, current_time);
     }
 
   else if (mode == INICIO_P_I || mode == WAITING_P_I) {
@@ -363,7 +389,7 @@ lista *add_end_event(lista *event_list, int mode, double current_time) {
     max = 75;
     // depois da Proteção segue para o INEM
     type = FIM_P_I;
-    return adicionar(event_list, type, box_muller(sigma, dm, max, min)+current_time);
+    return adicionar(event_list, type, box_muller(sigma, dm, max, min)+current_time, 0, current_time);
   }
 
   else {
