@@ -13,31 +13,39 @@ int main(void) {
 
   variables *init_variables = malloc(sizeof(variables));
 
-  init_variables->m = 1;
-  init_variables->L = 1;
+  init_variables->m = 19;
+  init_variables->L = 17;
   init_variables->k = 20000; //infinite
-  init_variables->mi = 1;
+  init_variables->mi = 13;
 
   double lambda = (double)(600) / (double)3600;
 
   // initialize
-  int found = 0;
+  //int found = 0;
   resultados * results;
-  FILE *f;
+/*  FILE *f;
   f = fopen("results.txt", "a+");
+  FILE *db;
+  db = fopen("database.txt", "a+");
   printf("Trying with {m = %d ; L = %d ; mi = %d}\n", init_variables->m , init_variables->L , init_variables->mi);
   while(!found){
     double epsilon = 0.02;
     double epsilon1 = 0.01;
     double epsilon2 = 2;
-    double epsilon3 = 2;
+    double epsilon3 = 2;*/
     lista * protecao_event_list = NULL;
-    int counter = 0;
+    //int counter = 0;
     for (int i = 0 ; i < init_variables -> m ; i++ ) {
       protecao_event_list = add_init_event( protecao_event_list , FIM , 0 , lambda );
     }
     protecao_event_list = add_init_event( protecao_event_list , INICIO, 0 , (double)lambda);
     results = proccess(protecao_event_list, init_variables, lambda);
+    printf("With {m = %d ; L = %d ; mi = %d}\n", init_variables->m , init_variables->L , init_variables->mi);
+    printf("Delay calls prob. at prot.: %f\n", results -> delay_prob);
+    printf("Lost calls prob: %f\n", results -> lost_prob);
+    printf("Avg. delay Prot: %f\n", results -> avg_delay);
+    printf("Avg. delay Total: %f\n", results -> total_delay);
+    /*fprintf(db,"%d;%d;%d;%f;%f;%f;%f\n", init_variables->m , init_variables->L , init_variables->mi, results -> delay_prob, results -> lost_prob, results -> avg_delay, results -> total_delay);
     if((fabs(results -> delay_prob - 0.2) <= epsilon) && (fabs(results -> lost_prob - 0.01) <= epsilon1) && (fabs(results -> avg_delay - 30) <= epsilon2) && (fabs(results -> total_delay - 60)) <= epsilon3){
       printf("\n\nFOUND!!!\n");
       printf("With {m = %d ; L = %d ; mi = %d}\n", init_variables->m , init_variables->L , init_variables->mi);
@@ -54,7 +62,7 @@ int main(void) {
       fprintf(f,"------------------------\n\n");
       //found = 1;
     }
-    if((fabs(results -> delay_prob - 0.2) <= epsilon)) counter++;
+    if(fabs(results -> delay_prob - 0.2) <= epsilon) counter++;
     if(fabs(results -> lost_prob - 0.01) <= epsilon1) counter++;
     if(fabs(results -> avg_delay - 30) <= epsilon2) counter++;
     if(fabs(results -> total_delay - 60) <= epsilon3) counter++;
@@ -87,11 +95,12 @@ int main(void) {
         printf("Trying with {m = %d ; L = %d ; mi = %d}\n", init_variables->m , init_variables->L , init_variables->mi);
       }
 
-    if(init_variables -> m > 30)
-      break;
+    if(init_variables -> m > 40)
+      break;*/
     free(results);
-  }
-  fclose(f);
+  //}
+  //fclose(f);
+  //fclose(db);
   free(init_variables);
   return 0;
 }
@@ -131,8 +140,8 @@ resultados * proccess(lista * protecao_event_list, variables * init_variables, d
   average_absolute_error -> samples = 0;
   average_absolute_error -> ammount = 0;
 
-  int vetor[40] = {0};
-  double interval = 0.1;
+  int vetor[50] = {0};
+  double interval = 1/(lambda);
   int vetor_size = sizeof(vetor)/sizeof(vetor[0]);
   int total_samples = 1000000;
   while (server -> clients_handled < total_samples || server -> protecao -> waiting_clients > 0 || server-> protecao -> event_list != NULL || server -> inem -> event_list != NULL ){
@@ -251,17 +260,15 @@ resultados * proccess(lista * protecao_event_list, variables * init_variables, d
         if(average_absolute_error -> samples == 0){
           average_absolute_error -> samples++;
           average_absolute_error -> ammount = (server -> clock - server -> inem -> waiting_list -> tempo);
-          vetor[20]++;
+          vetor[10]++;
         }
         else {
           average_absolute_error -> samples++;
           average_absolute_error -> ammount += (double)(server -> clock - server -> inem -> waiting_list -> tempo - server -> inem -> waiting_list -> previsao);
-          double value = (server -> clock - server -> inem -> waiting_list -> tempo - server -> inem -> waiting_list -> previsao)/(server -> inem -> waiting_list -> previsao);
+          double value = (double)(server -> clock - server -> inem -> waiting_list -> tempo - server -> inem -> waiting_list -> previsao);
           double pos = (value/interval);
-          printf("From x=%f x'=%f\n",server -> clock - server -> inem -> waiting_list -> tempo,server -> inem -> waiting_list -> previsao );
-          printf("Got pos %f\n",pos );
-          if(pos <= 20 && pos >=-20)
-            vetor[(int)(pos+20)]++;
+          if(pos <= 40 && pos >=-10)
+            vetor[(int)(pos+10)]++;
         }
         if (server -> protecao -> event_list != NULL) {
           while (server -> protecao -> event_list -> tipo == WAITING_I && server -> protecao -> event_list -> tempo == server -> clock) {
@@ -291,29 +298,37 @@ resultados * proccess(lista * protecao_event_list, variables * init_variables, d
   imprimir(server -> inem -> waiting_list);
   printf("\n\n");*/
 }
-resultados * results = (resultados *)malloc(sizeof(resultados));
-results -> delay_prob = (double) (average_delay -> samples) /  (double)(total_samples);
-results -> lost_prob = (double) (lost_calls -> samples) /  (double)(total_samples);
-results -> avg_delay = (double) (average_delay -> ammount) /  (double)(average_delay -> samples);
-results -> total_delay = (double) (average_delay_total -> ammount) /  (double)(average_delay_total -> samples);
+  resultados * results = (resultados *)malloc(sizeof(resultados));
+  results -> delay_prob = (double) (average_delay -> samples) /  (double)(total_samples);
+  results -> lost_prob = (double) (lost_calls -> samples) /  (double)(total_samples);
+  results -> avg_delay = (double) (average_delay -> ammount) /  (double)(average_delay -> samples);
+  results -> total_delay = (double) (average_delay_total -> ammount) /  (double)(average_delay_total -> samples);
 
-FILE *fptr;
-fptr = fopen("histogram.txt", "wb");
-for(int i=0; i < vetor_size; i++){
-    fprintf(fptr, "%d\n", vetor[i]);
+  FILE *fptr1;
+  fptr1 = fopen("settings.txt", "wb");
+
+  FILE *fptr;
+  double aux = 0;
+  fptr = fopen("histogram.txt", "wb");
+  for(int i=0; i < vetor_size; i++){
+      fprintf(fptr, "%d\n", vetor[i]);
+      aux += vetor[i];
   }
+  fprintf(fptr1, "%f %d %d %f\n", interval ,vetor_size, average_absolute_error -> samples , ((double)average_absolute_error -> ammount / (double)average_absolute_error -> samples));
 
-if(average_delay_total -> samples == 0)
-  results -> total_delay = 0;
-//printf("Avg. error: %f\n", (double) (average_absolute_error -> ammount) /  (double)(average_absolute_error -> samples));
-free(server -> inem);
-free(server -> protecao);
-free(server);
-free(lost_calls);
-free(average_delay);
-free(average_delay_total);
-free(average_absolute_error);
-return results;
+  if(average_delay_total -> samples == 0)
+    results -> total_delay = 0;
+  //printf("Avg. error: %f\n", (double) (average_absolute_error -> ammount) /  (double)(average_absolute_error -> samples));
+  free(server -> inem);
+  free(server -> protecao);
+  free(server);
+  free(lost_calls);
+  free(average_delay);
+  free(average_delay_total);
+  free(average_absolute_error);
+  fclose(fptr);
+  fclose(fptr1);
+  return results;
 }
 
 lista *add_init_event(lista *event_list, int mode, double current_time, double lambda) {
