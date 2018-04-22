@@ -29,7 +29,7 @@ typedef struct{
 
 typedef struct{
   int samples;
-  int ammount;
+  double ammount;
 } probability;
 
 typedef struct{

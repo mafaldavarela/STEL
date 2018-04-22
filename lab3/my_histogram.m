@@ -14,7 +14,6 @@ dim = [.725 .68 .2 .2];
 str = {'Interval used = '+ string(interval)
     'Nr. of intervals = '+ string(intervals_nr)
     'Samples used = '+ string(samples_nr)
-    'Samples avg. = '+ string(samples_avg)
-    '0 is between position 9 and 10'};
+    'Samples avg. = '+ string(samples_avg)};
 annotation('textbox',dim,'String',str,'FitBoxToText','on');
 saveas(figure1,'picture.png')

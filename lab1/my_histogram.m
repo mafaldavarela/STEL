@@ -9,6 +9,7 @@ categories = string(zeros(1, intervals_nr));
 for i=1 : 1 : intervals_nr
     categories(i)= string((i-1)*interval) + " - " + string((i)*interval);
 end
+
 set(gcf,'units','normalized','outerposition',[0 0 1 1]); %maximize plot
 values = values';
 figure1 = bar(categorical(categories), values);

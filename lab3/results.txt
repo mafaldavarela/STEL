@@ -1,0 +1,1239 @@
+With {m = 13 ; L = 13 ; mi = 20}
+Delay calls prob. at prot.: 0.627486
+Lost calls prob: 0.015113
+Avg. delay Prot: 28.720663
+Avg. delay Total: 60.766708
+------------------------
+
+With {m = 13 ; L = 13 ; mi = 21}
+Delay calls prob. at prot.: 0.631286
+Lost calls prob: 0.015213
+Avg. delay Prot: 28.632503
+Avg. delay Total: 59.440317
+------------------------
+
+With {m = 13 ; L = 13 ; mi = 22}
+Delay calls prob. at prot.: 0.634318
+Lost calls prob: 0.015332
+Avg. delay Prot: 28.508671
+Avg. delay Total: 58.012953
+------------------------
+
+With {m = 13 ; L = 13 ; mi = 34}
+Delay calls prob. at prot.: 0.635309
+Lost calls prob: 0.014970
+Avg. delay Prot: 28.257424
+Avg. delay Total: 60.000000
+------------------------
+
+With {m = 13 ; L = 14 ; mi = 20}
+Delay calls prob. at prot.: 0.632085
+Lost calls prob: 0.013222
+Avg. delay Prot: 30.108509
+Avg. delay Total: 60.790047
+------------------------
+
+With {m = 13 ; L = 14 ; mi = 21}
+Delay calls prob. at prot.: 0.633003
+Lost calls prob: 0.011720
+Avg. delay Prot: 29.326875
+Avg. delay Total: 59.717827
+------------------------
+
+With {m = 13 ; L = 14 ; mi = 22}
+Delay calls prob. at prot.: 0.639988
+Lost calls prob: 0.012333
+Avg. delay Prot: 29.602532
+Avg. delay Total: 58.321451
+------------------------
+
+With {m = 13 ; L = 15 ; mi = 20}
+Delay calls prob. at prot.: 0.633823
+Lost calls prob: 0.010084
+Avg. delay Prot: 30.637575
+Avg. delay Total: 61.041705
+------------------------
+
+With {m = 13 ; L = 15 ; mi = 21}
+Delay calls prob. at prot.: 0.639900
+Lost calls prob: 0.010685
+Avg. delay Prot: 30.497140
+Avg. delay Total: 59.468717
+------------------------
+
+With {m = 13 ; L = 15 ; mi = 22}
+Delay calls prob. at prot.: 0.647064
+Lost calls prob: 0.010460
+Avg. delay Prot: 30.545077
+Avg. delay Total: 58.231281
+------------------------
+
+With {m = 13 ; L = 16 ; mi = 20}
+Delay calls prob. at prot.: 0.636218
+Lost calls prob: 0.008824
+Avg. delay Prot: 31.557149
+Avg. delay Total: 61.402098
+------------------------
+
+With {m = 13 ; L = 16 ; mi = 21}
+Delay calls prob. at prot.: 0.642836
+Lost calls prob: 0.008405
+Avg. delay Prot: 31.217463
+Avg. delay Total: 59.473597
+------------------------
+
+With {m = 13 ; L = 16 ; mi = 22}
+Delay calls prob. at prot.: 0.646647
+Lost calls prob: 0.007944
+Avg. delay Prot: 30.820420
+Avg. delay Total: 58.513174
+------------------------
+
+With {m = 13 ; L = 17 ; mi = 21}
+Delay calls prob. at prot.: 0.647395
+Lost calls prob: 0.006870
+Avg. delay Prot: 31.858649
+Avg. delay Total: 59.823467
+------------------------
+
+With {m = 13 ; L = 17 ; mi = 22}
+Delay calls prob. at prot.: 0.650683
+Lost calls prob: 0.006833
+Avg. delay Prot: 31.759035
+Avg. delay Total: 58.006181
+------------------------
+
+With {m = 14 ; L = 32 ; mi = 21}
+Delay calls prob. at prot.: 0.554556
+Lost calls prob: 0.000080
+Avg. delay Prot: 28.083573
+Avg. delay Total: 61.216503
+------------------------
+
+With {m = 14 ; L = 32 ; mi = 22}
+Delay calls prob. at prot.: 0.559771
+Lost calls prob: 0.000079
+Avg. delay Prot: 28.395487
+Avg. delay Total: 60.109083
+------------------------
+
+With {m = 14 ; L = 36 ; mi = 21}
+Delay calls prob. at prot.: 0.553416
+Lost calls prob: 0.000051
+Avg. delay Prot: 28.100781
+Avg. delay Total: 61.244637
+------------------------
+
+With {m = 14 ; L = 36 ; mi = 23}
+Delay calls prob. at prot.: 0.555237
+Lost calls prob: 0.000022
+Avg. delay Prot: 28.025160
+Avg. delay Total: 58.585556
+------------------------
+
+With {m = 14 ; L = 38 ; mi = 21}
+Delay calls prob. at prot.: 0.552301
+Lost calls prob: 0.000010
+Avg. delay Prot: 28.064316
+Avg. delay Total: 61.402807
+------------------------
+
+With {m = 14 ; L = 40 ; mi = 22}
+Delay calls prob. at prot.: 0.557149
+Lost calls prob: 0.000018
+Avg. delay Prot: 28.028019
+Avg. delay Total: 60.398526
+------------------------
+
+With {m = 14 ; L = 40 ; mi = 23}
+Delay calls prob. at prot.: 0.558839
+Lost calls prob: 0.000012
+Avg. delay Prot: 28.060039
+Avg. delay Total: 58.506812
+------------------------
+
+With {m = 18 ; L = 5 ; mi = 21}
+Delay calls prob. at prot.: 0.182329
+Lost calls prob: 0.014707
+Avg. delay Prot: 10.838161
+Avg. delay Total: 59.341772
+------------------------
+
+With {m = 18 ; L = 5 ; mi = 22}
+Delay calls prob. at prot.: 0.184295
+Lost calls prob: 0.014700
+Avg. delay Prot: 10.885721
+Avg. delay Total: 61.740741
+------------------------
+
+With {m = 18 ; L = 5 ; mi = 23}
+Delay calls prob. at prot.: 0.182424
+Lost calls prob: 0.014430
+Avg. delay Prot: 10.880010
+Avg. delay Total: 58.086957
+------------------------
+
+With {m = 18 ; L = 5 ; mi = 25}
+Delay calls prob. at prot.: 0.182134
+Lost calls prob: 0.015031
+Avg. delay Prot: 10.941516
+Avg. delay Total: 59.200000
+------------------------
+
+With {m = 18 ; L = 6 ; mi = 21}
+Delay calls prob. at prot.: 0.192770
+Lost calls prob: 0.010188
+Avg. delay Prot: 11.847995
+Avg. delay Total: 61.504032
+------------------------
+
+With {m = 18 ; L = 6 ; mi = 23}
+Delay calls prob. at prot.: 0.193853
+Lost calls prob: 0.010043
+Avg. delay Prot: 11.915854
+Avg. delay Total: 60.621622
+------------------------
+
+With {m = 18 ; L = 6 ; mi = 24}
+Delay calls prob. at prot.: 0.193949
+Lost calls prob: 0.009743
+Avg. delay Prot: 11.834647
+Avg. delay Total: 60.681818
+------------------------
+
+With {m = 18 ; L = 6 ; mi = 26}
+Delay calls prob. at prot.: 0.195310
+Lost calls prob: 0.010366
+Avg. delay Prot: 11.836649
+Avg. delay Total: 61.857143
+------------------------
+
+With {m = 18 ; L = 7 ; mi = 22}
+Delay calls prob. at prot.: 0.201194
+Lost calls prob: 0.006944
+Avg. delay Prot: 12.615287
+Avg. delay Total: 61.559633
+------------------------
+
+With {m = 18 ; L = 7 ; mi = 24}
+Delay calls prob. at prot.: 0.202265
+Lost calls prob: 0.007017
+Avg. delay Prot: 12.636546
+Avg. delay Total: 61.057971
+------------------------
+
+With {m = 18 ; L = 7 ; mi = 29}
+Delay calls prob. at prot.: 0.202168
+Lost calls prob: 0.006750
+Avg. delay Prot: 12.632385
+Avg. delay Total: 59.000000
+------------------------
+
+With {m = 18 ; L = 7 ; mi = 32}
+Delay calls prob. at prot.: 0.203210
+Lost calls prob: 0.006766
+Avg. delay Prot: 12.573707
+Avg. delay Total: 60.000000
+------------------------
+
+With {m = 18 ; L = 8 ; mi = 23}
+Delay calls prob. at prot.: 0.204766
+Lost calls prob: 0.004725
+Avg. delay Prot: 13.384082
+Avg. delay Total: 58.574163
+------------------------
+
+With {m = 18 ; L = 8 ; mi = 25}
+Delay calls prob. at prot.: 0.207965
+Lost calls prob: 0.004823
+Avg. delay Prot: 13.277840
+Avg. delay Total: 59.810811
+------------------------
+
+With {m = 18 ; L = 8 ; mi = 26}
+Delay calls prob. at prot.: 0.205476
+Lost calls prob: 0.004399
+Avg. delay Prot: 13.065959
+Avg. delay Total: 58.219512
+------------------------
+
+With {m = 18 ; L = 8 ; mi = 27}
+Delay calls prob. at prot.: 0.203026
+Lost calls prob: 0.004567
+Avg. delay Prot: 13.250618
+Avg. delay Total: 61.320000
+------------------------
+
+With {m = 18 ; L = 8 ; mi = 28}
+Delay calls prob. at prot.: 0.204960
+Lost calls prob: 0.004657
+Avg. delay Prot: 13.184514
+Avg. delay Total: 60.823529
+------------------------
+
+With {m = 18 ; L = 9 ; mi = 23}
+Delay calls prob. at prot.: 0.210886
+Lost calls prob: 0.003114
+Avg. delay Prot: 13.701014
+Avg. delay Total: 61.128788
+------------------------
+
+With {m = 18 ; L = 9 ; mi = 24}
+Delay calls prob. at prot.: 0.210664
+Lost calls prob: 0.003154
+Avg. delay Prot: 13.679433
+Avg. delay Total: 59.383886
+------------------------
+
+With {m = 18 ; L = 9 ; mi = 25}
+Delay calls prob. at prot.: 0.209882
+Lost calls prob: 0.003110
+Avg. delay Prot: 13.746753
+Avg. delay Total: 58.744000
+------------------------
+
+With {m = 18 ; L = 9 ; mi = 33}
+Delay calls prob. at prot.: 0.209889
+Lost calls prob: 0.002933
+Avg. delay Prot: 13.667539
+Avg. delay Total: 62.000000
+------------------------
+
+With {m = 18 ; L = 10 ; mi = 23}
+Delay calls prob. at prot.: 0.213501
+Lost calls prob: 0.002002
+Avg. delay Prot: 14.066637
+Avg. delay Total: 61.301493
+------------------------
+
+With {m = 18 ; L = 10 ; mi = 24}
+Delay calls prob. at prot.: 0.213726
+Lost calls prob: 0.001996
+Avg. delay Prot: 14.089105
+Avg. delay Total: 59.189744
+------------------------
+
+With {m = 18 ; L = 10 ; mi = 26}
+Delay calls prob. at prot.: 0.211537
+Lost calls prob: 0.002162
+Avg. delay Prot: 14.119511
+Avg. delay Total: 60.813559
+------------------------
+
+With {m = 18 ; L = 10 ; mi = 27}
+Delay calls prob. at prot.: 0.209301
+Lost calls prob: 0.002207
+Avg. delay Prot: 14.190826
+Avg. delay Total: 58.142857
+------------------------
+
+With {m = 18 ; L = 11 ; mi = 23}
+Delay calls prob. at prot.: 0.212375
+Lost calls prob: 0.001111
+Avg. delay Prot: 14.201982
+Avg. delay Total: 61.493917
+------------------------
+
+With {m = 18 ; L = 11 ; mi = 24}
+Delay calls prob. at prot.: 0.211376
+Lost calls prob: 0.001290
+Avg. delay Prot: 14.165241
+Avg. delay Total: 60.286486
+------------------------
+
+With {m = 18 ; L = 11 ; mi = 26}
+Delay calls prob. at prot.: 0.212615
+Lost calls prob: 0.001411
+Avg. delay Prot: 14.383614
+Avg. delay Total: 58.113043
+------------------------
+
+With {m = 18 ; L = 11 ; mi = 27}
+Delay calls prob. at prot.: 0.212459
+Lost calls prob: 0.001275
+Avg. delay Prot: 14.250411
+Avg. delay Total: 58.400000
+------------------------
+
+With {m = 18 ; L = 11 ; mi = 31}
+Delay calls prob. at prot.: 0.213389
+Lost calls prob: 0.001291
+Avg. delay Prot: 14.293895
+Avg. delay Total: 58.315789
+------------------------
+
+With {m = 18 ; L = 11 ; mi = 32}
+Delay calls prob. at prot.: 0.215049
+Lost calls prob: 0.001349
+Avg. delay Prot: 14.392148
+Avg. delay Total: 59.333333
+------------------------
+
+With {m = 18 ; L = 12 ; mi = 23}
+Delay calls prob. at prot.: 0.215141
+Lost calls prob: 0.000874
+Avg. delay Prot: 14.497418
+Avg. delay Total: 60.317526
+------------------------
+
+With {m = 18 ; L = 12 ; mi = 24}
+Delay calls prob. at prot.: 0.213048
+Lost calls prob: 0.000828
+Avg. delay Prot: 14.516297
+Avg. delay Total: 59.381295
+------------------------
+
+With {m = 18 ; L = 12 ; mi = 25}
+Delay calls prob. at prot.: 0.218473
+Lost calls prob: 0.000992
+Avg. delay Prot: 14.825287
+Avg. delay Total: 61.284483
+------------------------
+
+With {m = 18 ; L = 12 ; mi = 26}
+Delay calls prob. at prot.: 0.211968
+Lost calls prob: 0.000815
+Avg. delay Prot: 14.414110
+Avg. delay Total: 61.394366
+------------------------
+
+With {m = 18 ; L = 12 ; mi = 27}
+Delay calls prob. at prot.: 0.214200
+Lost calls prob: 0.000819
+Avg. delay Prot: 14.431265
+Avg. delay Total: 58.196078
+------------------------
+
+With {m = 18 ; L = 12 ; mi = 28}
+Delay calls prob. at prot.: 0.215580
+Lost calls prob: 0.000917
+Avg. delay Prot: 14.571741
+Avg. delay Total: 60.555556
+------------------------
+
+With {m = 18 ; L = 13 ; mi = 24}
+Delay calls prob. at prot.: 0.214064
+Lost calls prob: 0.000670
+Avg. delay Prot: 14.719537
+Avg. delay Total: 61.521845
+------------------------
+
+With {m = 18 ; L = 13 ; mi = 27}
+Delay calls prob. at prot.: 0.213500
+Lost calls prob: 0.000490
+Avg. delay Prot: 14.571953
+Avg. delay Total: 58.767123
+------------------------
+
+With {m = 18 ; L = 13 ; mi = 30}
+Delay calls prob. at prot.: 0.214587
+Lost calls prob: 0.000510
+Avg. delay Prot: 14.484894
+Avg. delay Total: 58.363636
+------------------------
+
+With {m = 18 ; L = 14 ; mi = 22}
+Delay calls prob. at prot.: 0.216251
+Lost calls prob: 0.000321
+Avg. delay Prot: 14.853064
+Avg. delay Total: 61.777568
+------------------------
+
+With {m = 18 ; L = 14 ; mi = 23}
+Delay calls prob. at prot.: 0.215830
+Lost calls prob: 0.000311
+Avg. delay Prot: 14.792707
+Avg. delay Total: 61.108219
+------------------------
+
+With {m = 18 ; L = 14 ; mi = 24}
+Delay calls prob. at prot.: 0.213735
+Lost calls prob: 0.000301
+Avg. delay Prot: 14.794727
+Avg. delay Total: 60.378753
+------------------------
+
+With {m = 18 ; L = 14 ; mi = 25}
+Delay calls prob. at prot.: 0.217587
+Lost calls prob: 0.000414
+Avg. delay Prot: 14.907292
+Avg. delay Total: 58.656109
+------------------------
+
+With {m = 18 ; L = 14 ; mi = 27}
+Delay calls prob. at prot.: 0.213329
+Lost calls prob: 0.000410
+Avg. delay Prot: 14.818792
+Avg. delay Total: 59.083333
+------------------------
+
+With {m = 18 ; L = 14 ; mi = 29}
+Delay calls prob. at prot.: 0.212985
+Lost calls prob: 0.000403
+Avg. delay Prot: 14.774233
+Avg. delay Total: 59.812500
+------------------------
+
+With {m = 18 ; L = 15 ; mi = 23}
+Delay calls prob. at prot.: 0.217753
+Lost calls prob: 0.000234
+Avg. delay Prot: 14.836356
+Avg. delay Total: 61.482117
+------------------------
+
+With {m = 18 ; L = 15 ; mi = 24}
+Delay calls prob. at prot.: 0.217545
+Lost calls prob: 0.000199
+Avg. delay Prot: 14.972419
+Avg. delay Total: 61.487585
+------------------------
+
+With {m = 18 ; L = 15 ; mi = 25}
+Delay calls prob. at prot.: 0.216088
+Lost calls prob: 0.000244
+Avg. delay Prot: 14.918533
+Avg. delay Total: 61.905229
+------------------------
+
+With {m = 18 ; L = 15 ; mi = 26}
+Delay calls prob. at prot.: 0.214036
+Lost calls prob: 0.000231
+Avg. delay Prot: 14.807159
+Avg. delay Total: 59.278351
+------------------------
+
+With {m = 18 ; L = 16 ; mi = 22}
+Delay calls prob. at prot.: 0.217252
+Lost calls prob: 0.000177
+Avg. delay Prot: 14.979360
+Avg. delay Total: 61.874155
+------------------------
+
+With {m = 18 ; L = 16 ; mi = 24}
+Delay calls prob. at prot.: 0.214745
+Lost calls prob: 0.000132
+Avg. delay Prot: 15.017854
+Avg. delay Total: 60.668113
+------------------------
+
+With {m = 18 ; L = 16 ; mi = 25}
+Delay calls prob. at prot.: 0.218612
+Lost calls prob: 0.000133
+Avg. delay Prot: 15.136717
+Avg. delay Total: 58.060377
+------------------------
+
+With {m = 18 ; L = 16 ; mi = 27}
+Delay calls prob. at prot.: 0.216566
+Lost calls prob: 0.000160
+Avg. delay Prot: 15.028712
+Avg. delay Total: 58.837838
+------------------------
+
+With {m = 18 ; L = 16 ; mi = 28}
+Delay calls prob. at prot.: 0.215216
+Lost calls prob: 0.000135
+Avg. delay Prot: 14.918575
+Avg. delay Total: 59.901235
+------------------------
+
+With {m = 18 ; L = 16 ; mi = 29}
+Delay calls prob. at prot.: 0.217575
+Lost calls prob: 0.000146
+Avg. delay Prot: 15.065389
+Avg. delay Total: 61.875000
+------------------------
+
+With {m = 18 ; L = 16 ; mi = 31}
+Delay calls prob. at prot.: 0.213247
+Lost calls prob: 0.000150
+Avg. delay Prot: 14.717098
+Avg. delay Total: 58.545455
+------------------------
+
+With {m = 18 ; L = 17 ; mi = 23}
+Delay calls prob. at prot.: 0.218371
+Lost calls prob: 0.000130
+Avg. delay Prot: 14.983349
+Avg. delay Total: 58.940928
+------------------------
+
+With {m = 18 ; L = 17 ; mi = 24}
+Delay calls prob. at prot.: 0.219801
+Lost calls prob: 0.000062
+Avg. delay Prot: 15.107488
+Avg. delay Total: 61.110108
+------------------------
+
+With {m = 18 ; L = 17 ; mi = 25}
+Delay calls prob. at prot.: 0.215244
+Lost calls prob: 0.000070
+Avg. delay Prot: 14.910906
+Avg. delay Total: 61.340909
+------------------------
+
+With {m = 18 ; L = 17 ; mi = 26}
+Delay calls prob. at prot.: 0.215063
+Lost calls prob: 0.000077
+Avg. delay Prot: 14.733185
+Avg. delay Total: 58.543103
+------------------------
+
+With {m = 18 ; L = 18 ; mi = 24}
+Delay calls prob. at prot.: 0.216676
+Lost calls prob: 0.000062
+Avg. delay Prot: 14.732010
+Avg. delay Total: 58.311808
+------------------------
+
+With {m = 18 ; L = 18 ; mi = 25}
+Delay calls prob. at prot.: 0.218260
+Lost calls prob: 0.000031
+Avg. delay Prot: 15.024654
+Avg. delay Total: 60.374150
+------------------------
+
+With {m = 18 ; L = 18 ; mi = 26}
+Delay calls prob. at prot.: 0.216772
+Lost calls prob: 0.000089
+Avg. delay Prot: 14.826657
+Avg. delay Total: 59.100000
+------------------------
+
+With {m = 18 ; L = 18 ; mi = 28}
+Delay calls prob. at prot.: 0.214867
+Lost calls prob: 0.000042
+Avg. delay Prot: 14.910819
+Avg. delay Total: 58.984615
+------------------------
+
+With {m = 18 ; L = 18 ; mi = 30}
+Delay calls prob. at prot.: 0.217202
+Lost calls prob: 0.000064
+Avg. delay Prot: 14.840664
+Avg. delay Total: 61.142857
+------------------------
+
+With {m = 18 ; L = 19 ; mi = 24}
+Delay calls prob. at prot.: 0.217640
+Lost calls prob: 0.000063
+Avg. delay Prot: 15.080647
+Avg. delay Total: 58.904661
+------------------------
+
+With {m = 18 ; L = 19 ; mi = 25}
+Delay calls prob. at prot.: 0.217257
+Lost calls prob: 0.000034
+Avg. delay Prot: 14.953926
+Avg. delay Total: 61.095238
+------------------------
+
+With {m = 18 ; L = 19 ; mi = 26}
+Delay calls prob. at prot.: 0.215971
+Lost calls prob: 0.000043
+Avg. delay Prot: 14.941691
+Avg. delay Total: 58.116564
+------------------------
+
+With {m = 18 ; L = 19 ; mi = 27}
+Delay calls prob. at prot.: 0.214864
+Lost calls prob: 0.000028
+Avg. delay Prot: 14.858655
+Avg. delay Total: 58.643478
+------------------------
+
+With {m = 18 ; L = 20 ; mi = 24}
+Delay calls prob. at prot.: 0.215605
+Lost calls prob: 0.000034
+Avg. delay Prot: 14.821516
+Avg. delay Total: 61.673820
+------------------------
+
+With {m = 18 ; L = 20 ; mi = 26}
+Delay calls prob. at prot.: 0.218152
+Lost calls prob: 0.000029
+Avg. delay Prot: 15.059156
+Avg. delay Total: 60.725191
+------------------------
+
+With {m = 18 ; L = 21 ; mi = 24}
+Delay calls prob. at prot.: 0.215933
+Lost calls prob: 0.000009
+Avg. delay Prot: 14.968523
+Avg. delay Total: 60.572174
+------------------------
+
+With {m = 18 ; L = 21 ; mi = 25}
+Delay calls prob. at prot.: 0.216087
+Lost calls prob: 0.000032
+Avg. delay Prot: 15.152707
+Avg. delay Total: 59.439024
+------------------------
+
+With {m = 18 ; L = 21 ; mi = 26}
+Delay calls prob. at prot.: 0.216254
+Lost calls prob: 0.000005
+Avg. delay Prot: 14.719492
+Avg. delay Total: 58.387097
+------------------------
+
+With {m = 18 ; L = 21 ; mi = 29}
+Delay calls prob. at prot.: 0.218077
+Lost calls prob: 0.000010
+Avg. delay Prot: 15.086919
+Avg. delay Total: 59.500000
+------------------------
+
+With {m = 18 ; L = 21 ; mi = 31}
+Delay calls prob. at prot.: 0.216263
+Lost calls prob: 0.000021
+Avg. delay Prot: 15.207072
+Avg. delay Total: 58.928571
+------------------------
+
+With {m = 18 ; L = 22 ; mi = 23}
+Delay calls prob. at prot.: 0.216816
+Lost calls prob: 0.000014
+Avg. delay Prot: 15.037922
+Avg. delay Total: 61.100490
+------------------------
+
+With {m = 18 ; L = 22 ; mi = 24}
+Delay calls prob. at prot.: 0.217881
+Lost calls prob: 0.000017
+Avg. delay Prot: 15.059666
+Avg. delay Total: 61.652850
+------------------------
+
+With {m = 18 ; L = 22 ; mi = 25}
+Delay calls prob. at prot.: 0.218924
+Lost calls prob: 0.000013
+Avg. delay Prot: 15.038634
+Avg. delay Total: 58.493631
+------------------------
+
+With {m = 18 ; L = 22 ; mi = 26}
+Delay calls prob. at prot.: 0.215608
+Lost calls prob: 0.000001
+Avg. delay Prot: 14.931487
+Avg. delay Total: 58.709343
+------------------------
+
+With {m = 18 ; L = 23 ; mi = 24}
+Delay calls prob. at prot.: 0.214172
+Lost calls prob: 0.000006
+Avg. delay Prot: 14.945324
+Avg. delay Total: 59.844749
+------------------------
+
+With {m = 18 ; L = 23 ; mi = 25}
+Delay calls prob. at prot.: 0.215726
+Lost calls prob: 0.000006
+Avg. delay Prot: 14.879806
+Avg. delay Total: 61.616046
+------------------------
+
+With {m = 18 ; L = 23 ; mi = 27}
+Delay calls prob. at prot.: 0.217275
+Lost calls prob: 0.000000
+Avg. delay Prot: 15.053853
+Avg. delay Total: 58.610619
+------------------------
+
+With {m = 18 ; L = 23 ; mi = 28}
+Delay calls prob. at prot.: 0.214992
+Lost calls prob: 0.000000
+Avg. delay Prot: 15.026531
+Avg. delay Total: 61.634921
+------------------------
+
+With {m = 18 ; L = 24 ; mi = 24}
+Delay calls prob. at prot.: 0.215936
+Lost calls prob: 0.000000
+Avg. delay Prot: 14.902314
+Avg. delay Total: 59.562295
+------------------------
+
+With {m = 18 ; L = 24 ; mi = 25}
+Delay calls prob. at prot.: 0.216802
+Lost calls prob: 0.000015
+Avg. delay Prot: 15.003395
+Avg. delay Total: 60.595238
+------------------------
+
+With {m = 18 ; L = 24 ; mi = 26}
+Delay calls prob. at prot.: 0.217276
+Lost calls prob: 0.000004
+Avg. delay Prot: 14.816519
+Avg. delay Total: 58.359375
+------------------------
+
+With {m = 18 ; L = 24 ; mi = 27}
+Delay calls prob. at prot.: 0.218658
+Lost calls prob: 0.000012
+Avg. delay Prot: 15.006494
+Avg. delay Total: 58.983051
+------------------------
+
+With {m = 18 ; L = 24 ; mi = 30}
+Delay calls prob. at prot.: 0.214697
+Lost calls prob: 0.000004
+Avg. delay Prot: 15.024509
+Avg. delay Total: 61.549020
+------------------------
+
+With {m = 18 ; L = 24 ; mi = 33}
+Delay calls prob. at prot.: 0.215810
+Lost calls prob: 0.000012
+Avg. delay Prot: 14.912154
+Avg. delay Total: 61.000000
+------------------------
+
+With {m = 18 ; L = 25 ; mi = 26}
+Delay calls prob. at prot.: 0.215195
+Lost calls prob: 0.000003
+Avg. delay Prot: 15.032152
+Avg. delay Total: 58.500000
+------------------------
+
+With {m = 18 ; L = 25 ; mi = 29}
+Delay calls prob. at prot.: 0.214416
+Lost calls prob: 0.000001
+Avg. delay Prot: 14.778263
+Avg. delay Total: 58.000000
+------------------------
+
+With {m = 18 ; L = 26 ; mi = 23}
+Delay calls prob. at prot.: 0.217381
+Lost calls prob: 0.000002
+Avg. delay Prot: 14.806602
+Avg. delay Total: 61.780405
+------------------------
+
+With {m = 18 ; L = 26 ; mi = 24}
+Delay calls prob. at prot.: 0.216603
+Lost calls prob: 0.000000
+Avg. delay Prot: 14.901068
+Avg. delay Total: 59.026210
+------------------------
+
+With {m = 18 ; L = 26 ; mi = 25}
+Delay calls prob. at prot.: 0.216260
+Lost calls prob: 0.000002
+Avg. delay Prot: 15.135171
+Avg. delay Total: 61.419453
+------------------------
+
+With {m = 18 ; L = 26 ; mi = 26}
+Delay calls prob. at prot.: 0.215941
+Lost calls prob: 0.000000
+Avg. delay Prot: 14.947453
+Avg. delay Total: 58.474576
+------------------------
+
+With {m = 18 ; L = 26 ; mi = 27}
+Delay calls prob. at prot.: 0.215790
+Lost calls prob: 0.000000
+Avg. delay Prot: 14.757454
+Avg. delay Total: 58.546512
+------------------------
+
+With {m = 18 ; L = 26 ; mi = 31}
+Delay calls prob. at prot.: 0.218245
+Lost calls prob: 0.000000
+Avg. delay Prot: 14.982960
+Avg. delay Total: 58.500000
+------------------------
+
+With {m = 18 ; L = 27 ; mi = 23}
+Delay calls prob. at prot.: 0.216267
+Lost calls prob: 0.000000
+Avg. delay Prot: 14.921643
+Avg. delay Total: 61.957965
+------------------------
+
+With {m = 18 ; L = 27 ; mi = 25}
+Delay calls prob. at prot.: 0.218851
+Lost calls prob: 0.000000
+Avg. delay Prot: 15.025702
+Avg. delay Total: 60.178295
+------------------------
+
+With {m = 18 ; L = 28 ; mi = 25}
+Delay calls prob. at prot.: 0.213410
+Lost calls prob: 0.000000
+Avg. delay Prot: 14.777100
+Avg. delay Total: 59.447059
+------------------------
+
+With {m = 18 ; L = 29 ; mi = 24}
+Delay calls prob. at prot.: 0.215968
+Lost calls prob: 0.000000
+Avg. delay Prot: 14.957901
+Avg. delay Total: 59.817518
+------------------------
+
+With {m = 18 ; L = 29 ; mi = 26}
+Delay calls prob. at prot.: 0.213580
+Lost calls prob: 0.000000
+Avg. delay Prot: 14.702781
+Avg. delay Total: 58.925234
+------------------------
+
+With {m = 18 ; L = 29 ; mi = 27}
+Delay calls prob. at prot.: 0.217097
+Lost calls prob: 0.000000
+Avg. delay Prot: 15.106105
+Avg. delay Total: 58.946970
+------------------------
+
+With {m = 18 ; L = 29 ; mi = 28}
+Delay calls prob. at prot.: 0.216410
+Lost calls prob: 0.000000
+Avg. delay Prot: 15.109764
+Avg. delay Total: 59.888889
+------------------------
+
+With {m = 18 ; L = 30 ; mi = 23}
+Delay calls prob. at prot.: 0.215296
+Lost calls prob: 0.000000
+Avg. delay Prot: 15.140430
+Avg. delay Total: 61.037037
+------------------------
+
+With {m = 18 ; L = 30 ; mi = 24}
+Delay calls prob. at prot.: 0.216490
+Lost calls prob: 0.000000
+Avg. delay Prot: 14.997727
+Avg. delay Total: 61.719490
+------------------------
+
+With {m = 18 ; L = 30 ; mi = 25}
+Delay calls prob. at prot.: 0.217264
+Lost calls prob: 0.000000
+Avg. delay Prot: 14.942356
+Avg. delay Total: 60.474843
+------------------------
+
+With {m = 18 ; L = 30 ; mi = 26}
+Delay calls prob. at prot.: 0.216649
+Lost calls prob: 0.000000
+Avg. delay Prot: 14.926102
+Avg. delay Total: 60.122302
+------------------------
+
+With {m = 18 ; L = 31 ; mi = 24}
+Delay calls prob. at prot.: 0.214396
+Lost calls prob: 0.000000
+Avg. delay Prot: 14.951720
+Avg. delay Total: 61.694954
+------------------------
+
+With {m = 18 ; L = 31 ; mi = 25}
+Delay calls prob. at prot.: 0.214258
+Lost calls prob: 0.000000
+Avg. delay Prot: 14.981714
+Avg. delay Total: 60.659864
+------------------------
+
+With {m = 18 ; L = 31 ; mi = 32}
+Delay calls prob. at prot.: 0.218048
+Lost calls prob: 0.000000
+Avg. delay Prot: 15.208193
+Avg. delay Total: 60.117647
+------------------------
+
+With {m = 18 ; L = 31 ; mi = 34}
+Delay calls prob. at prot.: 0.213996
+Lost calls prob: 0.000000
+Avg. delay Prot: 14.878516
+Avg. delay Total: 61.000000
+------------------------
+
+With {m = 18 ; L = 32 ; mi = 23}
+Delay calls prob. at prot.: 0.217827
+Lost calls prob: 0.000000
+Avg. delay Prot: 15.145267
+Avg. delay Total: 61.733161
+------------------------
+
+With {m = 18 ; L = 32 ; mi = 24}
+Delay calls prob. at prot.: 0.216306
+Lost calls prob: 0.000000
+Avg. delay Prot: 15.068773
+Avg. delay Total: 58.668050
+------------------------
+
+With {m = 18 ; L = 32 ; mi = 25}
+Delay calls prob. at prot.: 0.217834
+Lost calls prob: 0.000000
+Avg. delay Prot: 14.831252
+Avg. delay Total: 60.321212
+------------------------
+
+With {m = 18 ; L = 32 ; mi = 26}
+Delay calls prob. at prot.: 0.216902
+Lost calls prob: 0.000000
+Avg. delay Prot: 14.888364
+Avg. delay Total: 61.576159
+------------------------
+
+With {m = 18 ; L = 32 ; mi = 28}
+Delay calls prob. at prot.: 0.216623
+Lost calls prob: 0.000000
+Avg. delay Prot: 15.180743
+Avg. delay Total: 60.459016
+------------------------
+
+With {m = 18 ; L = 32 ; mi = 30}
+Delay calls prob. at prot.: 0.213094
+Lost calls prob: 0.000000
+Avg. delay Prot: 14.774156
+Avg. delay Total: 61.785714
+------------------------
+
+With {m = 18 ; L = 32 ; mi = 32}
+Delay calls prob. at prot.: 0.217862
+Lost calls prob: 0.000000
+Avg. delay Prot: 14.801480
+Avg. delay Total: 62.000000
+------------------------
+
+With {m = 18 ; L = 33 ; mi = 24}
+Delay calls prob. at prot.: 0.218870
+Lost calls prob: 0.000000
+Avg. delay Prot: 15.077896
+Avg. delay Total: 58.943431
+------------------------
+
+With {m = 18 ; L = 33 ; mi = 25}
+Delay calls prob. at prot.: 0.215960
+Lost calls prob: 0.000000
+Avg. delay Prot: 14.964030
+Avg. delay Total: 60.313776
+------------------------
+
+With {m = 18 ; L = 34 ; mi = 24}
+Delay calls prob. at prot.: 0.218076
+Lost calls prob: 0.000000
+Avg. delay Prot: 14.982557
+Avg. delay Total: 60.836893
+------------------------
+
+With {m = 18 ; L = 34 ; mi = 25}
+Delay calls prob. at prot.: 0.216733
+Lost calls prob: 0.000000
+Avg. delay Prot: 15.162629
+Avg. delay Total: 58.734908
+------------------------
+
+With {m = 18 ; L = 34 ; mi = 28}
+Delay calls prob. at prot.: 0.216754
+Lost calls prob: 0.000000
+Avg. delay Prot: 15.127693
+Avg. delay Total: 58.701149
+------------------------
+
+With {m = 18 ; L = 35 ; mi = 24}
+Delay calls prob. at prot.: 0.215961
+Lost calls prob: 0.000000
+Avg. delay Prot: 15.116016
+Avg. delay Total: 59.422535
+------------------------
+
+With {m = 18 ; L = 35 ; mi = 25}
+Delay calls prob. at prot.: 0.215925
+Lost calls prob: 0.000000
+Avg. delay Prot: 14.737293
+Avg. delay Total: 59.162602
+------------------------
+
+With {m = 18 ; L = 35 ; mi = 26}
+Delay calls prob. at prot.: 0.216768
+Lost calls prob: 0.000000
+Avg. delay Prot: 14.923014
+Avg. delay Total: 58.546512
+------------------------
+
+With {m = 18 ; L = 35 ; mi = 27}
+Delay calls prob. at prot.: 0.214135
+Lost calls prob: 0.000000
+Avg. delay Prot: 14.702991
+Avg. delay Total: 58.511364
+------------------------
+
+With {m = 18 ; L = 35 ; mi = 36}
+Delay calls prob. at prot.: 0.218426
+Lost calls prob: 0.000000
+Avg. delay Prot: 15.139141
+Avg. delay Total: 59.000000
+------------------------
+
+With {m = 18 ; L = 36 ; mi = 24}
+Delay calls prob. at prot.: 0.216014
+Lost calls prob: 0.000000
+Avg. delay Prot: 14.871166
+Avg. delay Total: 61.752525
+------------------------
+
+With {m = 18 ; L = 36 ; mi = 25}
+Delay calls prob. at prot.: 0.217599
+Lost calls prob: 0.000000
+Avg. delay Prot: 15.015570
+Avg. delay Total: 58.682927
+------------------------
+
+With {m = 18 ; L = 36 ; mi = 27}
+Delay calls prob. at prot.: 0.215314
+Lost calls prob: 0.000000
+Avg. delay Prot: 14.827090
+Avg. delay Total: 59.878049
+------------------------
+
+With {m = 18 ; L = 36 ; mi = 28}
+Delay calls prob. at prot.: 0.216298
+Lost calls prob: 0.000000
+Avg. delay Prot: 15.138642
+Avg. delay Total: 58.537736
+------------------------
+
+With {m = 18 ; L = 37 ; mi = 22}
+Delay calls prob. at prot.: 0.215251
+Lost calls prob: 0.000000
+Avg. delay Prot: 14.918727
+Avg. delay Total: 61.444351
+------------------------
+
+With {m = 18 ; L = 37 ; mi = 23}
+Delay calls prob. at prot.: 0.213799
+Lost calls prob: 0.000000
+Avg. delay Prot: 15.024219
+Avg. delay Total: 61.125333
+------------------------
+
+With {m = 18 ; L = 37 ; mi = 24}
+Delay calls prob. at prot.: 0.212312
+Lost calls prob: 0.000000
+Avg. delay Prot: 14.803812
+Avg. delay Total: 59.400000
+------------------------
+
+With {m = 18 ; L = 37 ; mi = 25}
+Delay calls prob. at prot.: 0.217552
+Lost calls prob: 0.000000
+Avg. delay Prot: 15.031022
+Avg. delay Total: 59.502427
+------------------------
+
+With {m = 18 ; L = 37 ; mi = 26}
+Delay calls prob. at prot.: 0.216316
+Lost calls prob: 0.000000
+Avg. delay Prot: 14.901288
+Avg. delay Total: 59.608889
+------------------------
+
+With {m = 18 ; L = 37 ; mi = 30}
+Delay calls prob. at prot.: 0.216331
+Lost calls prob: 0.000000
+Avg. delay Prot: 14.705678
+Avg. delay Total: 59.000000
+------------------------
+
+With {m = 18 ; L = 38 ; mi = 24}
+Delay calls prob. at prot.: 0.214570
+Lost calls prob: 0.000000
+Avg. delay Prot: 14.957371
+Avg. delay Total: 61.592292
+------------------------
+
+With {m = 18 ; L = 38 ; mi = 25}
+Delay calls prob. at prot.: 0.216794
+Lost calls prob: 0.000000
+Avg. delay Prot: 15.014073
+Avg. delay Total: 61.542308
+------------------------
+
+With {m = 18 ; L = 39 ; mi = 26}
+Delay calls prob. at prot.: 0.215344
+Lost calls prob: 0.000000
+Avg. delay Prot: 14.877865
+Avg. delay Total: 58.333333
+------------------------
+
+With {m = 18 ; L = 39 ; mi = 27}
+Delay calls prob. at prot.: 0.218194
+Lost calls prob: 0.000000
+Avg. delay Prot: 15.074677
+Avg. delay Total: 60.866667
+------------------------
+
+With {m = 18 ; L = 39 ; mi = 29}
+Delay calls prob. at prot.: 0.213580
+Lost calls prob: 0.000000
+Avg. delay Prot: 14.875152
+Avg. delay Total: 59.568627
+------------------------
+
+With {m = 18 ; L = 39 ; mi = 30}
+Delay calls prob. at prot.: 0.215025
+Lost calls prob: 0.000000
+Avg. delay Prot: 14.866792
+Avg. delay Total: 60.000000
+------------------------
+
+With {m = 18 ; L = 39 ; mi = 33}
+Delay calls prob. at prot.: 0.215840
+Lost calls prob: 0.000000
+Avg. delay Prot: 14.936370
+Avg. delay Total: 58.333333
+------------------------
+
+With {m = 18 ; L = 40 ; mi = 23}
+Delay calls prob. at prot.: 0.216134
+Lost calls prob: 0.000000
+Avg. delay Prot: 15.010341
+Avg. delay Total: 60.659058
+------------------------
+
+With {m = 18 ; L = 40 ; mi = 24}
+Delay calls prob. at prot.: 0.216460
+Lost calls prob: 0.000000
+Avg. delay Prot: 15.018304
+Avg. delay Total: 60.800000
+------------------------
+
+With {m = 18 ; L = 40 ; mi = 25}
+Delay calls prob. at prot.: 0.216209
+Lost calls prob: 0.000000
+Avg. delay Prot: 14.761448
+Avg. delay Total: 59.315018
+------------------------
+
+With {m = 18 ; L = 40 ; mi = 26}
+Delay calls prob. at prot.: 0.216435
+Lost calls prob: 0.000000
+Avg. delay Prot: 14.838436
+Avg. delay Total: 60.708738
+------------------------
+
+With {m = 18 ; L = 40 ; mi = 27}
+Delay calls prob. at prot.: 0.217345
+Lost calls prob: 0.000000
+Avg. delay Prot: 14.904120
+Avg. delay Total: 61.791209
+------------------------
+
+With {m = 18 ; L = 40 ; mi = 33}
+Delay calls prob. at prot.: 0.215832
+Lost calls prob: 0.000000
+Avg. delay Prot: 14.875051
+Avg. delay Total: 60.000000
+------------------------
+
+With {m = 19 ; L = 17 ; mi = 13}
+Delay calls prob. at prot.: 0.180537
+Lost calls prob: 0.018338
+Avg. delay Prot: 29.214865
+Avg. delay Total: 146.980898
+------------------------
+
